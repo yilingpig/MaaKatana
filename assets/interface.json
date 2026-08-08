@@ -1,0 +1,45 @@
+{
+  "interface_version": 2,
+  "name": "MaaKatana",
+  "description": "这是一个使用 MaaFramework 创建的个人用自动化工具，用于日本拼图nonogram katana的自动化。",
+  "contact": "请输入文本",
+  "license": "MIT",
+  "welcome": "首次使用！欢迎使用 MaaKatana!",
+  "github": "https://github.com/yilingpig/MaaKatana",
+  "version": "0.1.0",
+  "controller": [
+    {
+      "name": "安卓端",
+      "type": "Adb",
+      "display_short_side": 720
+    }
+  ],
+  "resource": [
+    {
+      "name": "default",
+      "path": [
+        "./resource"
+      ]
+    }
+  ],
+  "task": [
+    {
+      "name": "启动游戏",
+      "entry": "启动游戏"
+    },
+    {
+      "name": "观看广告",
+      "entry": "进入公会"
+    },
+    {
+      "name": "收集产物",
+      "entry": "事务处"
+    }
+  ],
+  "agent": {
+    "child_exec": "python",
+    "child_args": [
+      "./agent/main.py"
+    ]
+  }
+}

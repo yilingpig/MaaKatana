@@ -1,0 +1,1278 @@
+{
+  "事务处": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12,
+        "y": 1665
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": [
+      "全部收集",
+      "寻找迫击炮"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "事务处.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "全部收集": {
+    "$__mpe_code": {
+      "position": {
+        "x": 332,
+        "y": 1489
+      }
+    },
+    "action": {
+      "param": {
+        "target": [
+          353,
+          94,
+          566,
+          47
+        ]
+      },
+      "type": "Click"
+    },
+    "next": [
+      "返回"
+    ],
+    "on_error": [
+      "寻找迫击炮"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "全部收集.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    },
+    "timeout": 3000
+  },
+  "制造木梁": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1532,
+        "y": 26
+      }
+    },
+    "action": {
+      "param": {
+        "begin": [
+          490,
+          410,
+          20,
+          29
+        ],
+        "end": [
+          [
+            773,
+            412,
+            18,
+            24
+          ]
+        ]
+      },
+      "type": "Swipe"
+    },
+    "next": [
+      "木梁制造路由"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "木梁.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "制造木炭": {
+    "$__mpe_code": {
+      "position": {
+        "x": 332,
+        "y": 321
+      }
+    },
+    "action": {
+      "param": {
+        "begin": [
+          490,
+          410,
+          20,
+          29
+        ],
+        "end": [
+          [
+            773,
+            412,
+            18,
+            24
+          ]
+        ]
+      },
+      "type": "Swipe"
+    },
+    "next": [
+      "木炭制造路由"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "制造木炭.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "制造武士刀": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1932,
+        "y": 1259
+      }
+    },
+    "action": {
+      "param": {
+        "begin": [
+          484,
+          423,
+          23,
+          38
+        ],
+        "end": [
+          [
+            773,
+            426,
+            14,
+            38
+          ]
+        ]
+      },
+      "type": "Swipe"
+    },
+    "next": [
+      "武士刀制造路由"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "制造武士刀.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "制造迫击炮": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1612,
+        "y": 1629
+      }
+    },
+    "action": {
+      "param": {
+        "begin": [
+          476,
+          461,
+          37,
+          42
+        ],
+        "end": [
+          [
+            766,
+            460,
+            26,
+            32
+          ]
+        ]
+      },
+      "type": "Swipe"
+    },
+    "next": [
+      "迫击炮制造路由"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "迫击炮.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "制造钢铁": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2893,
+        "y": 1658
+      }
+    },
+    "action": {
+      "param": {
+        "begin": [
+          489,
+          412,
+          14,
+          23
+        ],
+        "end": [
+          [
+            774,
+            416,
+            13,
+            21
+          ]
+        ]
+      },
+      "type": "Swipe"
+    },
+    "recognition": {
+      "param": {
+        "template": [
+          "制造钢铁.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    },
+    "next": [
+      "钢铁制造路由"
+    ]
+  },
+  "向上滑动": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2892,
+        "y": 1293
+      }
+    },
+    "action": {
+      "param": {
+        "begin": [
+          620,
+          380,
+          30,
+          30
+        ],
+        "end": [
+          [
+            620,
+            280,
+            30,
+            30
+          ]
+        ]
+      },
+      "type": "Swipe"
+    },
+    "next": [
+      "检查木炭建筑"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "向上滑动寻找木梁": {
+    "$__mpe_code": {
+      "position": {
+        "x": 972,
+        "y": 662
+      }
+    },
+    "action": {
+      "param": {
+        "begin": [
+          620,
+          380,
+          30,
+          30
+        ],
+        "end": [
+          [
+            620,
+            280,
+            30,
+            30
+          ]
+        ]
+      },
+      "type": "Swipe"
+    },
+    "next": [
+      "检查木梁建筑"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "启动游戏": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12,
+        "y": 12
+      }
+    },
+    "action": {
+      "param": {
+        "package": "com.ucdevs.jcross/com.ucdevs.jcross.MainActivity"
+      },
+      "type": "StartApp"
+    }
+  },
+  "奖励已发放": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2812,
+        "y": 326
+      }
+    },
+    "action": {
+      "param": {
+        "key": [
+          4
+        ]
+      },
+      "type": "ClickKey"
+    },
+    "next": [
+      "返回公会"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "recognition": {
+      "param": {
+        "all_of": [
+          "奖励已发放图片确认",
+          "奖励已发放文字确认"
+        ]
+      },
+      "type": "And"
+    },
+    "timeout": 40000
+  },
+  "奖励已发放图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 972,
+        "y": 12
+      }
+    },
+    "recognition": {
+      "param": {
+        "detector": "SIFT",
+        "roi": [
+          1075,
+          2,
+          205,
+          102
+        ],
+        "template": [
+          "奖励已发放.png"
+        ]
+      },
+      "type": "FeatureMatch"
+    }
+  },
+  "奖励已发放文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 252,
+        "y": 12
+      }
+    },
+    "recognition": {
+      "param": {
+        "expected": [
+          "奖励已发放",
+          "奖励.{0,2}发放"
+        ],
+        "order_by": "Expected",
+        "roi": [
+          1075,
+          2,
+          205,
+          102
+        ]
+      },
+      "type": "OCR"
+    }
+  },
+  "寻找广告": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2172,
+        "y": 1009
+      }
+    },
+    "action": {
+      "param": {
+        "begin": [
+          596,
+          646,
+          71,
+          58
+        ],
+        "end": [
+          [
+            607,
+            156,
+            60,
+            49
+          ]
+        ]
+      },
+      "type": "Swipe"
+    },
+    "next": [
+      "点击广告"
+    ]
+  },
+  "寻找武士刀": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1292,
+        "y": 1309
+      }
+    },
+    "next": [
+      "点击武士刀"
+    ],
+    "on_error": [
+      "向上滑动"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "铁匠铺.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "寻找迫击炮": {
+    "$__mpe_code": {
+      "position": {
+        "x": 972,
+        "y": 1595
+      }
+    },
+    "next": [
+      "点击迫击炮"
+    ],
+    "on_error": [
+      "寻找武士刀"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "工作室.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "广告加载完成": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2172,
+        "y": 319
+      }
+    },
+    "inverse": true,
+    "next": [
+      "奖励已发放",
+      "等待广告"
+    ],
+    "on_error": [
+      "点击广告"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "正在处理.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    },
+    "timeout": 40000
+  },
+  "开始建造": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2252,
+        "y": 1631
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": [
+      "检查武士刀建筑"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "制造.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    },
+    "timeout": 60000
+  },
+  "开始建造_": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2172,
+        "y": 70
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "recognition": {
+      "param": {
+        "template": [
+          "制造.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    },
+    "next": [
+      "检查钢铁建筑"
+    ],
+    "timeout": 60000
+  },
+  "开始建造_副本": {
+    "$__mpe_code": {
+      "position": {
+        "x": 972,
+        "y": 320
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": [
+      "检查木梁建筑"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "制造.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    },
+    "timeout": 60000
+  },
+  "开始建造武士刀": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2572,
+        "y": 1246
+      }
+    },
+    "action": {
+      "param": {
+        "target": [
+          648,
+          490,
+          199,
+          57
+        ]
+      },
+      "type": "Click"
+    },
+    "next": [
+      "向上滑动"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "开始制造.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    },
+    "timeout": 60000
+  },
+  "木梁制造路由": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1852,
+        "y": 54
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "制造数量路由",
+        "custom_action_param": {
+          "build_node": "开始建造_",
+          "next_node": "检查钢铁建筑",
+          "product": "木梁",
+          "roi": [
+            384,
+            109,
+            515,
+            515
+          ]
+        }
+      },
+      "type": "Custom"
+    },
+    "next": [
+      "开始建造_"
+    ],
+    "timeout": 60000
+  },
+  "木炭制造路由": {
+    "$__mpe_code": {
+      "position": {
+        "x": 652,
+        "y": 319
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "制造数量路由",
+        "custom_action_param": {
+          "build_node": "开始建造_副本",
+          "next_node": "检查木梁建筑",
+          "product": "木炭",
+          "roi": [
+            384,
+            109,
+            515,
+            515
+          ]
+        }
+      },
+      "type": "Custom"
+    },
+    "next": [
+      "开始建造_副本"
+    ],
+    "timeout": 60000
+  },
+  "检查木梁建筑": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1292,
+        "y": 375
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "hit_node": "点击木梁",
+          "miss_node": "向上滑动寻找木梁",
+          "template": [
+            "伐木场.png"
+          ],
+          "threshold": 0.7
+        }
+      },
+      "type": "Custom"
+    },
+    "timeout": 60000
+  },
+  "检查木炭建筑": {
+    "$__mpe_code": {
+      "position": {
+        "x": 3212,
+        "y": 1327
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "hit_node": "点击木炭",
+          "miss_node": "向上滑动",
+          "template": [
+            "炼金术士的小屋.png"
+          ],
+          "threshold": 0.7
+        }
+      },
+      "type": "Custom"
+    },
+    "timeout": 60000
+  },
+  "检查武士刀建筑": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2572,
+        "y": 1648
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "hit_node": "点击武士刀",
+          "miss_node": "向上滑动",
+          "template": [
+            "铁匠铺.png"
+          ],
+          "threshold": 0.7
+        }
+      },
+      "type": "Custom"
+    },
+    "timeout": 60000
+  },
+  "武士刀制造路由": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2252,
+        "y": 1259
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "制造数量路由",
+        "custom_action_param": {
+          "build_node": "开始建造武士刀",
+          "next_node": "向上滑动",
+          "product": "武士刀",
+          "roi": [
+            384,
+            109,
+            515,
+            515
+          ]
+        }
+      },
+      "type": "Custom"
+    },
+    "next": [
+      "开始建造武士刀"
+    ],
+    "timeout": 60000
+  },
+  "点击广告": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2492,
+        "y": 900
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "next": [
+      "等待广告或奖励"
+    ],
+    "recognition": {
+      "param": {
+        "all_of": [
+          "点击广告图片确认",
+          "点击广告文字确认"
+        ],
+        "box_index": 1
+      },
+      "type": "And"
+    }
+  },
+  "点击广告图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 732,
+        "y": 12
+      }
+    },
+    "recognition": {
+      "param": {
+        "detector": "SIFT",
+        "roi": [
+          337,
+          490,
+          599,
+          186
+        ],
+        "template": [
+          "治愈药水.png"
+        ]
+      },
+      "type": "FeatureMatch"
+    }
+  },
+  "点击广告文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 492,
+        "y": 12
+      }
+    },
+    "recognition": {
+      "param": {
+        "expected": [
+          "治愈药水"
+        ],
+        "order_by": "Expected",
+        "roi": [
+          337,
+          490,
+          599,
+          186
+        ]
+      },
+      "type": "OCR"
+    }
+  },
+  "点击木梁": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1212,
+        "y": 12
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "点击识别框中心"
+      },
+      "type": "Custom"
+    },
+    "next": [
+      "制造木梁"
+    ],
+    "recognition": {
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "木梁小.png"
+        ]
+      },
+      "type": "FeatureMatch"
+    }
+  },
+  "点击木炭": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12,
+        "y": 323
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "点击识别框中心"
+      },
+      "type": "Custom"
+    },
+    "next": [
+      "制造木炭"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "木炭.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "点击武士刀": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1612,
+        "y": 1263
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "点击识别框中心"
+      },
+      "type": "Custom"
+    },
+    "next": [
+      "制造武士刀"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "小武士刀.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "点击迫击炮": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1292,
+        "y": 1634
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "点击识别框中心"
+      },
+      "type": "Custom"
+    },
+    "next": [
+      "制造迫击炮"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "迫击炮 独立.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "等待广告": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2492,
+        "y": 481
+      }
+    },
+    "action": {
+      "param": {
+        "key": [
+          4
+        ]
+      },
+      "type": "ClickKey"
+    },
+    "next": [
+      "奖励已发放"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "跳过.png",
+          "Googleplay.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    },
+    "timeout": 40000
+  },
+  "等待广告加载": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1852,
+        "y": 635
+      }
+    },
+    "next": [
+      "广告加载完成"
+    ],
+    "on_error": [
+      "点击广告"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "正在处理.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    },
+    "timeout": 30000
+  },
+  "等待广告或奖励": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2172,
+        "y": 713
+      }
+    },
+    "next": [
+      "等待广告加载",
+      "奖励已发放",
+      "等待广告"
+    ],
+    "on_error": [
+      "点击广告"
+    ],
+    "rate_limit": 1000,
+    "timeout": 70000
+  },
+  "返回": {
+    "$__mpe_code": {
+      "position": {
+        "x": 652,
+        "y": 1479
+      }
+    },
+    "action": {
+      "param": {
+        "key": [
+          4
+        ]
+      },
+      "type": "ClickKey"
+    },
+    "next": [
+      "寻找迫击炮"
+    ],
+    "pre_wait_freezes": 2500
+  },
+  "返回公会": {
+    "$__mpe_code": {
+      "position": {
+        "x": 3132,
+        "y": 449
+      }
+    },
+    "action": {
+      "param": {
+        "key": [
+          4
+        ]
+      },
+      "type": "ClickKey"
+    }
+  },
+  "进入交易所": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1852,
+        "y": 997
+      }
+    },
+    "action": {
+      "param": {
+        "target": [
+          583,
+          0,
+          58,
+          70
+        ]
+      },
+      "type": "Click"
+    },
+    "next": [
+      "寻找广告"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "公会顶栏.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "进入公会": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1532,
+        "y": 995
+      }
+    },
+    "action": {
+      "param": {
+        "target": [
+          463,
+          558,
+          348,
+          63
+        ]
+      },
+      "type": "Click"
+    },
+    "next": [
+      "进入交易所"
+    ],
+    "recognition": {
+      "param": {
+        "template": [
+          "公会.png"
+        ]
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "迫击炮制造路由": {
+    "$__mpe_code": {
+      "position": {
+        "x": 1932,
+        "y": 1630
+      }
+    },
+    "action": {
+      "param": {
+        "custom_action": "制造数量路由",
+        "custom_action_param": {
+          "build_node": "开始建造",
+          "next_node": "检查武士刀建筑",
+          "product": "迫击炮",
+          "roi": [
+            384,
+            109,
+            515,
+            515
+          ]
+        }
+      },
+      "type": "Custom"
+    },
+    "next": [
+      "开始建造"
+    ],
+    "timeout": 60000
+  },
+  "向上滑动寻找钢铁": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2520,
+        "y": 1640
+      }
+    },
+    "action": {
+      "param": {
+        "begin": [
+          620,
+          380,
+          30,
+          30
+        ],
+        "end": [
+          [
+            620,
+            280,
+            30,
+            30
+          ]
+        ]
+      },
+      "type": "Swipe"
+    },
+    "next": [
+      "检查钢铁建筑"
+    ],
+    "rate_limit": 500,
+    "pre_wait_freezes": 400
+  },
+  "检查钢铁建筑": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2220,
+        "y": 1640
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "熔炉.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击钢铁",
+          "miss_node": "向上滑动寻找钢铁"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击钢铁": {
+    "$__mpe_code": {
+      "position": {
+        "x": 2410,
+        "y": 1520
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "点击钢铁.png"
+        ],
+        "count": 4,
+        "ratio": 0.6
+      }
+    },
+    "next": [
+      "制造钢铁"
+    ]
+  },
+  "钢铁制造路由": {
+    "$__mpe_code": {
+      "position": {
+        "x": 3100,
+        "y": 1658
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "制造数量路由",
+        "custom_action_param": {
+          "roi": [
+            384,
+            109,
+            515,
+            515
+          ],
+          "product": "钢铁",
+          "build_node": "开始建造钢铁",
+          "next_node": ""
+        }
+      }
+    },
+    "next": [
+      "开始建造钢铁"
+    ],
+    "timeout": 60000
+  },
+  "开始建造钢铁": {
+    "$__mpe_code": {
+      "position": {
+        "x": 3340,
+        "y": 1658
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "制造.png"
+        ]
+      }
+    },
+    "timeout": 60000
+  },
+  "$__mpe_config_Pipeline7": {
+    "$__mpe_code": {
+      "coordinateMode": "absolute-v1",
+      "isModifiedExternally": false,
+      "lastSyncTime": 1786182047788,
+      "prefix": "",
+      "savedViewport": {
+        "x": -842,
+        "y": -787,
+        "zoom": 0.66
+      },
+      "version": "v1.7.4",
+      "filename": "Pipeline7",
+      "filePath": "F:\\JUSTFORFUN\\MaaKatana-main\\assets\\resource\\pipeline\\\\Pipeline7.json"
+    }
+  }
+}
