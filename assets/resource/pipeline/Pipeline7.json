@@ -254,23 +254,25 @@
       }
     },
     "action": {
+      "type": "Custom",
       "param": {
-        "begin": [
-          620,
-          380,
-          30,
-          30
-        ],
-        "end": [
-          [
-            620,
-            280,
-            30,
-            30
-          ]
-        ]
-      },
-      "type": "Swipe"
+        "custom_action": "动态向上滑动",
+        "custom_action_param": {
+          "base_step": 80,
+          "min_step": 45,
+          "max_step": 100,
+          "start_x": 640,
+          "start_y": 450,
+          "duration": 400,
+          "roi": [
+            0,
+            80,
+            1280,
+            560
+          ],
+          "max_shift": 220
+        }
+      }
     },
     "next": [
       "检查木炭建筑"
@@ -286,29 +288,34 @@
       }
     },
     "action": {
+      "type": "Custom",
       "param": {
-        "begin": [
-          620,
-          380,
-          30,
-          30
-        ],
-        "end": [
-          [
-            620,
-            280,
-            30,
-            30
-          ]
-        ]
-      },
-      "type": "Swipe"
+        "custom_action": "动态向上滑动",
+        "custom_action_param": {
+          "base_step": 80,
+          "min_step": 45,
+          "max_step": 100,
+          "start_x": 640,
+          "start_y": 450,
+          "duration": 400,
+          "roi": [
+            0,
+            80,
+            1280,
+            560
+          ],
+          "max_shift": 220
+        }
+      }
     },
     "next": [
       "检查木梁建筑"
     ],
     "pre_wait_freezes": 400,
-    "rate_limit": 500
+    "rate_limit": 500,
+    "on_error": [
+      "向上滑动寻找钢铁"
+    ]
   },
   "启动游戏": {
     "$__mpe_code": {
@@ -346,13 +353,13 @@
       "返回公会"
     ],
     "recognition": {
+      "type": "Or",
       "param": {
-        "all_of": [
+        "any_of": [
           "奖励已发放图片确认",
           "奖励已发放文字确认"
         ]
-      },
-      "type": "And"
+      }
     },
     "timeout": 40000
   },
@@ -387,20 +394,20 @@
       }
     },
     "recognition": {
+      "type": "Custom",
       "param": {
-        "expected": [
-          "奖励已发放",
-          "奖励.{0,2}发放"
-        ],
-        "order_by": "Expected",
-        "roi": [
-          1075,
-          2,
-          205,
-          102
-        ]
-      },
-      "type": "OCR"
+        "custom_recognition": "奖励已发放确认",
+        "custom_recognition_param": {
+          "target": "奖励已发放",
+          "roi": [
+            1075,
+            2,
+            205,
+            102
+          ],
+          "max_mismatches": 1
+        }
+      }
     }
   },
   "寻找广告": {
@@ -676,7 +683,9 @@
           "template": [
             "伐木场.png"
           ],
-          "threshold": 0.7
+          "threshold": 0.7,
+          "max_misses": 3,
+          "fallback_node": "向上滑动寻找钢铁"
         }
       },
       "type": "Custom"
@@ -1135,29 +1144,34 @@
       }
     },
     "action": {
+      "type": "Custom",
       "param": {
-        "begin": [
-          620,
-          380,
-          30,
-          30
-        ],
-        "end": [
-          [
-            620,
-            280,
-            30,
-            30
-          ]
-        ]
-      },
-      "type": "Swipe"
+        "custom_action": "动态向上滑动",
+        "custom_action_param": {
+          "base_step": 80,
+          "min_step": 45,
+          "max_step": 100,
+          "start_x": 640,
+          "start_y": 450,
+          "duration": 400,
+          "roi": [
+            0,
+            80,
+            1280,
+            560
+          ],
+          "max_shift": 220
+        }
+      }
     },
     "next": [
       "检查钢铁建筑"
     ],
     "rate_limit": 500,
-    "pre_wait_freezes": 400
+    "pre_wait_freezes": 400,
+    "on_error": [
+      "开始船只派遣"
+    ]
   },
   "检查钢铁建筑": {
     "$__mpe_code": {
@@ -1176,7 +1190,9 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击钢铁",
-          "miss_node": "向上滑动寻找钢铁"
+          "miss_node": "向上滑动寻找钢铁",
+          "max_misses": 3,
+          "fallback_node": "开始船只派遣"
         }
       }
     },
@@ -1257,7 +1273,10 @@
         ]
       }
     },
-    "timeout": 60000
+    "timeout": 60000,
+    "next": [
+      "开始船只派遣"
+    ]
   },
   "$__mpe_config_Pipeline7": {
     "$__mpe_code": {
@@ -1273,6 +1292,302 @@
       "version": "v1.7.4",
       "filename": "Pipeline7",
       "filePath": "F:\\JUSTFORFUN\\MaaKatana-main\\assets\\resource\\pipeline\\\\Pipeline7.json"
+    }
+  },
+  "开始船只派遣": {
+    "$__mpe_code": {
+      "position": {
+        "x": 3610,
+        "y": 1658
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          650,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            90,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "检查船"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "检查船": {
+    "$__mpe_code": {
+      "position": {
+        "x": 3800,
+        "y": 1658
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "船.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击船",
+          "miss_node": "向上滑动寻找船",
+          "max_misses": 6,
+          "fallback_node": "商队"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "向上滑动寻找船": {
+    "$__mpe_code": {
+      "position": {
+        "x": 3800,
+        "y": 1780
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          650,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            90,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "检查船"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "点击船": {
+    "$__mpe_code": {
+      "position": {
+        "x": 3990,
+        "y": 1658
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "船.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "next": [
+      "检查船界面"
+    ],
+    "on_error": [
+      "商队"
+    ],
+    "timeout": 60000
+  },
+  "检查船界面": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4180,
+        "y": 1658
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "船界面.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击勘探",
+          "miss_node": "商队"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击勘探": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4370,
+        "y": 1658
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击勘探图片确认",
+          "点击勘探文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "向上滑动寻找派遣"
+    ],
+    "on_error": [
+      "商队"
+    ],
+    "timeout": 60000
+  },
+  "向上滑动寻找派遣": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4370,
+        "y": 1780
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "动态向上滑动",
+        "custom_action_param": {
+          "base_step": 80,
+          "min_step": 45,
+          "max_step": 100,
+          "start_x": 640,
+          "start_y": 450,
+          "duration": 400,
+          "roi": [
+            0,
+            80,
+            1280,
+            560
+          ],
+          "max_shift": 220
+        }
+      }
+    },
+    "next": [
+      "检查派遣"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "检查派遣": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4560,
+        "y": 1658
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "派遣.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击派遣",
+          "miss_node": "向上滑动寻找派遣"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击派遣": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4750,
+        "y": 1658
+      }
+    },
+    "action": {
+      "type": "Click"
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "派遣.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "timeout": 60000
+  },
+  "商队": {
+    "$__mpe_code": {
+      "position": {
+        "x": 3990,
+        "y": 1920
+      }
+    }
+  },
+  "点击勘探图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4560,
+        "y": 1658
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "勘探.png"
+        ],
+        "threshold": 0.9
+      }
+    }
+  },
+  "点击勘探文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4560,
+        "y": 1780
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "勘探"
+        ],
+        "order_by": "Expected",
+        "roi": [
+          0,
+          0,
+          1280,
+          720
+        ]
+      }
     }
   }
 }

@@ -86,11 +86,16 @@ def install_deps():
             ),
             dirs_exist_ok=True,
         )
-        shutil.copytree(
-            working_dir / "deps" / "share" / "MaaAgentBinary",
+        agent_binary_source = working_dir / "deps" / "share" / "MaaAgentBinary"
+        for agent_binary_path in (
+            install_path / "MaaAgentBinary",
             install_path / "libs" / "MaaAgentBinary",
-            dirs_exist_ok=True,
-        )
+        ):
+            shutil.copytree(
+                agent_binary_source,
+                agent_binary_path,
+                dirs_exist_ok=True,
+            )
         shutil.copytree(
             working_dir / "deps" / "bin" / "plugins",
             install_path / "plugins" / get_dotnet_platform_tag(),
