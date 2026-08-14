@@ -1,141 +1,106 @@
-# AGENTS.md
+# MaaKatana Agent 交接指南
 
-本文件是 MaaKatana 项目的 Agent 工作指南。后续每次任务如果发现新的稳定约定、发布流程变化、调试结论或容易踩坑的问题，应同步更新本文件，保持它比零散交接文档更适合快速接手。
+本文件是项目唯一的长期交接与执行规范。每个新 Agent 开始工作前必须阅读；发现新的稳定结论、运行路径或发布流程后，应在交付前更新本文件。
 
-## 项目概览
+## 1. 强制规则
 
-- 项目根目录：`F:\JUSTFORFUN\MaaKatana-main`
-- 正式 UI 目录：`F:\JUSTFORFUN\MFAAvalonia-v2.13.0`
-- 框架：MaaFramework + MFAAvalonia 通用 UI
-- 目标游戏：《日本拼图 nonogram katana》
-- 模拟器：LDPlayer，ADB serial 通常为 `emulator-5554`
-- 设备画面：`1280 x 720`，`assets/interface.json` 使用 `display_short_side: 720`
-- 当前主要入口：`启动游戏`、`观看广告`、`收集产物`
+- 未经用户在**当前对话**中明确确认，禁止执行任何 `git push`、标签推送、Release、`git push --force` 或其他发布操作。
+- 每次修改代码、Pipeline、脚本或配置后，必须自行 review：核对运行副本、关键分支、节点/模板引用、格式与差异校验。
+- PowerShell 沙箱或补丁工具被拒绝时，不要反复重试；改用 Node.js 的“唯一匹配校验 → 临时文件 → 原子替换”流程。
+- 仅处理用户要求的范围；不要擅自提交本地工具目录、调试产物或无关改动。
+- 对需求明确、修改范围可控且不涉及 GitHub 发布的事项，直接修改并自行校验；不要只给操作建议后停下。
+- 若同一诊断、工具或实现路径在较长时间内没有实质进展，主动切换思路（例如改查日志、换用替代工具、缩小问题范围或采用更直接的实现），不要在同一失败点反复消耗时间。
 
-## 重要目录
+## 2. 当前快照（2026-08-14）
 
-- `assets/interface.json`：Maa UI 任务入口、资源路径、Agent 启动配置。
-- `assets/resource/pipeline/Pipeline7.json`：当前主 Pipeline 源文件。
-- `assets/resource/image/`：源项目图片识别模板。
-- `agent/`：Python 自定义动作、数量判断、动态点击逻辑。
-- `tools/`：安装、配置 OCR、校验工具。
-- 	ools/run_project_checks.ps1：Windows 下的统一校验入口，自动设置 UTF-8，运行 Python 编译、schema、资源同步和 git diff --check。
-- 	ools/replace_text.ps1：补丁工具不可用时的安全文本替换入口，要求唯一匹配并使用临时文件原子替换。
-- 若沙箱无法启动 PowerShell 或补丁工具被系统拒绝，立即改用 Node.js 原子读写/替换流程；先校验唯一匹配，再写临时文件并原子替换，避免反复重试。
-- 每次完成可审查的代码、Pipeline、脚本或配置修改后，必须自行 review：核对实际运行路径、关键参数、预期分支和 diff/格式校验；确认无误后才向用户交付。
-- `.github/workflows/install.yml`：GitHub Actions 打包发布工作流。
-- `.github/cliff.toml`：git-cliff Release changelog 配置。
-- `assets/MaaCommonAssets/OCR/ppocr_v6/small/`：发布时所需 OCR 模型文件。
-- `install/`：本地运行/安装副本，不应作为主要源文件编辑。
-- 桌面端打包时，`tools/install.py` 必须同时安装 `install/MaaAgentBinary`（MaaPiCli）和 `install/libs/MaaAgentBinary`（MFAAvalonia 类 UI）；不要只保留其中一个目录。
+- 项目根目录：`F:\JUSTFORFUN\MaaKatana-main`。
+- 游戏：《日本拼图 nonogram katana》；设备画面 `1280 x 720`；LDPlayer serial 通常为 `emulator-5554`。
+- 当前准备发布：`v0.1.7`，包含迫击炮/武士刀路由修复、商队多城市派遣和汽船派遣流程。
+- `v0.1.7` 发布内容应包含 `agent/condition_router.py`、对应 Agent 导入、Pipeline7、任务入口及商队/汽船新增模板；本地 MPE 目录和未引用模板不得纳入发布。
+- `MaaPipelineEditor-v1.7.5-stable/` 是本地编辑器目录，保持未跟踪；除非用户明确要求，不得加入 Git。
+- 旧交接文档已由本文件取代，不要恢复。
 
-## 当前 Pipeline 状态
+## 3. 关键路径与运行副本
 
-- 当前保留并发布 `Pipeline7.json`；旧 `Pipeline6.json` 曾造成节点重复加载，资源目录中不应再恢复它。
-- `收集产物` UI 入口指向 `事务处`。
-- 主流程为：`事务处 -> 全部收集 -> 寻找迫击炮 -> 迫击炮 -> 武士刀 -> 木炭 -> 木梁 -> 钢铁`。
-- `事务处.next` 应保持 `['全部收集', '寻找迫击炮']`，用于“全部收集”按钮不存在时兜底。
-- 木梁、钢铁建筑连续 3 次未识别到时，分别跳转到 `向上滑动寻找钢铁`、`开始船只派遣`；相应寻找滑动在到达边界而动作失败时也按同一路径兜底，避免流程终止。
-- 钢铁流程包含：`检查钢铁建筑 -> 点击钢铁 -> 制造钢铁 -> 钢铁制造路由 -> 开始建造钢铁`。
-- 钢铁制造完成后，`开始船只派遣` 与 `向上滑动寻找船` 均使用固定大幅 Swipe：从 `[640, 650, 40, 40]` 上滑至 `[640, 90, 40, 40]`，以快速进入船只区域。
-- 钢铁制造完成后进入船只派遣：`开始船只派遣 -> 检查船 -> 点击船 -> 检查船界面 -> 点击勘探 -> 向上滑动寻找派遣 -> 检查派遣 -> 点击派遣`；`点击勘探` 必须同时命中 `勘探.png` 和 OCR 文字 `勘探`，图片阈值为 `0.9`，并使用 `box_index: 1` 点击 OCR 的“勘探”文字框，避免低分图片误匹配到第一行“贸易”。
-- `检查船` 最多识别失败 6 次；之后跳转到当前为空的 `商队` 占位节点。点击船后未识别到 `船界面.png` 也跳转到 `商队`。
-- `奖励已发放` 使用图片/OCR 的 `Or` 条件：图片识别失败时由 `agent/reward_reco.py` 做文字确认，先精确匹配 `^奖励已发放$`，再仅允许同为五个字且最多 1 个字符不同的 OCR 结果；单独“奖励”、少字或多字均不可继续跳过流程。
-- `点击钢铁` 当前使用 `FeatureMatch + SIFT` 和自定义动作 `点击识别框中心`。
-- `制造钢铁` 的 Swipe 坐标当前为 `begin: [489, 412, 14, 23]`，`end: [[774, 416, 13, 21]]`。
+- Pipeline 源文件：`assets/resource/pipeline/Pipeline7.json`。旧 `Pipeline6.json` 曾导致重复节点加载，不要恢复。
+- VS Code MaaFramework Support 实际加载：`install/resource`，因此运行 Pipeline 为 `install/resource/pipeline/Pipeline7.json`。
+- 主编辑点始终是 `assets/`；修改 Pipeline 后同步到 `install/resource/pipeline/Pipeline7.json`，修改图片后同步到 `install/resource/image/`。
+- 只有确认 `F:\JUSTFORFUN\MFAAvalonia-v2.13.0` 是当前实际运行目标时，才额外同步它的 `resource`；不要盲目覆盖。
+- 入口：`启动游戏`、`观看广告`、`收集产物`、`商队`、`汽船` 及三个汽船备用城市。`收集产物` 指向 `事务处`；`商队` 进入 `点击商队`；默认 `汽船` 选择纽约，雷克雅未克、墨西哥和墨尔本只通过独立入口手动选择，不影响主链。
 
-## 自定义 Agent 约定
+## 4. Pipeline 主链与最近修复
 
-- `agent/main.py` 必须在 `AgentServer.start_up()` 之前 import 自定义模块，否则动作可能未注册。
-- `agent/quantity_router.py` 注册 `制造数量路由`，通过 OCR 判断制造数量，并用 `context.override_next` 跳转到 `build_node` 或 `next_node`。
-- `agent/building_router.py` 注册 `检查建筑并跳转`，直接截图并使用 `TemplateMatch` 判断建筑，命中跳 `hit_node`，未命中或异常跳 `miss_node`；可选 `max_misses` 与 `fallback_node` 可在连续识别失败后跳转兜底节点。
-- `agent/dynamic_swipe.py` 注册 `动态向上滑动`，使用固定直接坐标和较长时长执行小步上滑，并根据前后截图估算实际位移，下一次自动缩小或增大步长。
-- `agent/dynamic_bidirectional_swipe.py` 注册备用动作 `动态往返滑动`：向上滑动达到边界或连续无位移后，向下回退若干步再重新向上寻找；当前 `Pipeline7.json` 暂不调用该模块。
-- `agent/recognition_click.py` 注册 `点击识别框中心`，点击当前识别框中心。
+- 主链：`事务处 -> 全部收集 -> 寻找迫击炮 -> 寻找武士刀 -> 木炭 -> 木梁 -> 钢铁 -> 船只派遣`。
+- `事务处.next` 必须保持 `['全部收集', '寻找迫击炮']`。
+- **候选识别节点的 `on_error` 不会用于未命中跳转。** 若节点放在父节点 `next` 中且带 `recognition`，未命中只会使父节点产生 `NextList.Failed` 并重试；该节点自己的 `on_error` 不会执行。
+- 最新修复：`寻找迫击炮` 与 `寻找武士刀` 均必须是无 `recognition` 的 DirectHit 自定义节点，动作均为 `检查建筑并跳转`：
+  - `寻找迫击炮`：检查 `工作室.png`；命中 `点击迫击炮`，未命中 `寻找武士刀`。
+  - `寻找武士刀`：检查 `铁匠铺.png`；命中 `点击武士刀`，未命中 `向上滑动`。
+- 迫击炮/武士刀路由修复已纳入 `v0.1.7` 发布范围。验证日志应出现 `寻找迫击炮` 的 `Action.Starting`，而非不断出现 `事务处 NextList.Failed`。
+- 木梁、钢铁建筑连续 3 次未识别时，分别跳 `向上滑动寻找钢铁`、`开始船只派遣`；两处寻找滑动失败时也走同样兜底。
+- `制造钢铁` Swipe：`begin [489, 412, 14, 23]`，`end [[774, 416, 13, 21]]`。
+
+## 5. 船只派遣
+
+- 链路：`开始船只派遣 -> 检查船 -> 点击船 -> 检查船界面 -> 点击勘探 -> 向上滑动寻找派遣 -> 检查派遣 -> 点击派遣 -> 点击商队 -> 检查商队界面 -> 罗马/雅典/西安选择与交易 -> 点击商队派遣 -> 检查汽船 -> 点击汽船 -> 检查汽船界面 -> 点击纽约 -> 向上滑到底汽船 -> 点击汽船派遣 -> 返回公会`。
+- `开始船只派遣` 与 `向上滑动寻找船` 均固定大幅上滑：`[640, 650, 40, 40] -> [640, 90, 40, 40]`。
+- `检查船` 连续失败 6 次跳 `点击商队`；点击船后没有 `船界面.png` 也跳 `点击商队`。
+- 已删除 `商队` 路由节点；`点击商队` 直接使用 `商队.png` 识别并点击，失败跳 `检查汽船`。
+- `检查商队界面` 使用 `商队界面识别.png` 判断是否进入界面；命中后跳 `点击罗马`，未命中跳 `检查汽船`。汽船图标或 `汽船界面识别.png` 未命中时统一执行 `返回公会`，避免派遣占用时反复重试。
+- `点击罗马`、`点击雅典` 与 `点击西安` 都必须同时命中对应的 `FeatureMatch + SIFT` 图片和 OCR 文字，使用 `box_index: 1` 点击 OCR 框；雅典位于罗马上一行，西安位于第二行且与雅典相差三行。
+- 罗马、雅典或西安无 `雷雨.png` 时，固定上滑到底，然后依次点击 `财宝.png` 两次、`金锭.png` 两次和 `派遣.png`；商品节点使用 `FeatureMatch + SIFT` 并限制在对应商品 ROI。
+- 罗马、雅典或西安出现雷雨时，固定大幅上滑并用图片/OCR 检查“这座城市暂时停止交易”；罗马命中后改选雅典，雅典命中后改选西安，西安命中后进入 `检查汽船`。雷雨但未识别到停止交易时下滑回到底部继续交易。
+- 汽船城市与商队城市保持同一识别写法：对应城市图片使用 `FeatureMatch + SIFT`，同时用 OCR 验证文字并点击 OCR 框；默认纽约，三个备用城市共享后续上滑和派遣节点。
+- 勘探在船界面第四行。`点击勘探` 必须同时命中 `勘探.png` 和 OCR 文本 `勘探`；图片阈值 `0.9`，`box_index: 1` 点击 OCR 文本框，避免误点第一行“贸易”。
+- 船只派遣通常超过 12 小时且难以撤销；未获用户明确许可时，不点击最终“派遣”或测试后续商队流程。
+## 6. 自定义 Agent 模块
+
+- `agent/main.py` 必须在 `AgentServer.start_up()` 前 import 自定义模块。
+- `agent/building_router.py`：`检查建筑并跳转`。直接截图 TemplateMatch；命中跳 `hit_node`，未命中或异常跳 `miss_node`；支持 `max_misses`、`fallback_node`。
+- `agent/condition_router.py`：`图文条件并跳转`。同一截图同时检查模板和 OCR，默认任一命中即可通过 `hit_node` 跳转，未命中走 `miss_node`。
+- `agent/quantity_router.py`：`制造数量路由`。OCR 判断制造数量，通过 `context.override_next` 跳转。
+- `agent/dynamic_swipe.py`：`动态向上滑动`，用于普通小步向上寻找。
+- `agent/dynamic_bidirectional_swipe.py`：备用往返滑动模块，当前 Pipeline 未调用。
+- `agent/recognition_click.py`：`点击识别框中心`；钢铁使用 `FeatureMatch + SIFT` 配合此动作。
+- `agent/reward_reco.py`：奖励识别只接受完整“奖励已发放”或同为五字且最多一个字符不同的 OCR 结果；单独“奖励”不得通过。
 - 不要覆盖 `agent/my_action.py`，除非用户明确要求。
 
-## Windows 工作流约定
+## 7. 调试与日志
 
-- 优先从项目根目录调用 `.	oolsun_project_checks.ps1`，不要在父目录直接运行相对路径校验命令。
-- PowerShell 向外部命令传递多个路径时使用数组或参数展开，例如 `@($path1, $path2)`；不要使用容易被解析成单个字符串的逗号表达式。
-- 运行 Python 工具前由统一脚本设置 `PYTHONIOENCODING=utf-8`，避免 schema 校验的 Unicode 符号触发 GBK 编码错误。
-- `apply_patch` 若因 Windows 会话出现 `Access is denied`，不要继续反复尝试，也不要直接覆盖文件；改用 `tools/replace_text.ps1`，并要求旧文本精确匹配一次。
-- 每次文件修改后先运行 `.	oolsun_project_checks.ps1 -SkipSchema` 做快速检查，需要交付前再运行完整校验。
-## Pipeline 修改规则
+- 插件日志：`C:\Users\yilin\AppData\Roaming\Code\User\workspaceStorage\74d19155edcdc76695ff9bf0e22adcb3\nekosu.maa-support\mse.log`。
+- 框架日志：`install/debug/maafw.log`。
+- 插件截图/连接连续失败时：确认 LDPlayer 已完全启动，关闭 MPE/正式 UI 等其他控制端，再在插件中重连；旧 PID 常是根因。
+- 地图业务方向通常是**向上滑动**。常规寻找优先使用动态小步上滑；不要把大幅固定上滑误用于所有节点。
 
-- 修改 Pipeline 时优先编辑 `assets/resource/pipeline/Pipeline7.json`，并同步到：
-  - `F:\JUSTFORFUN\MaaKatana-main\install\resource\pipeline\Pipeline7.json`
-  - `F:\JUSTFORFUN\MFAAvalonia-v2.13.0\resource\pipeline\Pipeline7.json`
-- 修改图片资源时同步三个目录：
-  - `F:\JUSTFORFUN\MaaKatana-main\assets\resource\image`
-  - `F:\JUSTFORFUN\MaaKatana-main\install\resource\image`
-  - `F:\JUSTFORFUN\MFAAvalonia-v2.13.0\resource\image`
-- 删除节点前必须检查所有引用：`next`、`on_error`、自定义参数中的 `build_node`、`next_node`、`hit_node`、`miss_node`，以及组合识别里的字符串引用。
-- 不要仅凭节点名判断重复；先确认运行时资源是否同时加载多个 pipeline 文件。
-- MaaFramework 的普通 `on_error` 对自定义动作 `override_next` 后的分支不总是可靠，重要分支应使用自定义动作显式跳转。
-- 修改正式 UI 资源后通常需要重启 `MFAAvalonia.exe`，否则可能继续使用旧资源哈希。
+## 8. 安装、发布与 GitHub Actions
 
-## Git 推送授权
+- 仓库：`yilingpig/MaaKatana`。
+- 发布 OCR 必须保留：`assets/MaaCommonAssets/OCR/ppocr_v6/small/`。
+- `tools/install.py` 桌面端必须同时复制 `install/MaaAgentBinary`（MaaPiCli）和 `install/libs/MaaAgentBinary`（MFAAvalonia）。
+- `.github/cliff.toml`：`owner = "yilingpig"`，`repo = "MaaKatana"`。
+- `install.yml` 的 git-cliff 需要 `GITHUB_TOKEN`；changelog job 需要 contents/pull-requests 读取权限，release job 需要 contents 写入权限。
+- 修复发布工作流后：提交到 `main`，创建**新标签**，不要重跑旧标签。需要出现在 Release changelog 的提交不得包含 `[skip changelog]`。
 
-- 未经用户在当前对话中明确确认，禁止执行任何 `git push`、`git push --force`、`git push origin <tag>`、创建并推送发布标签，或其他会将本地内容发布到 GitHub 的命令。
-- 可以在未推送的前提下检查 Git 状态、查看差异、检查远程引用和准备提交；创建 Git commit 仍须遵守更高优先级的用户与系统指令。
-- 当用户明确确认推送时，先说明将推送的分支、标签、提交范围和可能触发的 GitHub Actions，再执行对应命令。
-- 本项目后续所有 Agent 都必须先读取并严格遵守本文件；如本文件与用户、系统或开发者指令冲突，以更高优先级指令为准。
-## 发布与 GitHub Actions
+## 9. 校验与交付清单
 
-- GitHub 仓库：`https://github.com/yilingpig/MaaKatana`
-- `assets/MaaCommonAssets/OCR/ppocr_v6/small/` 必须提交到 GitHub，否则 Actions 会报 `File Not Found: .../assets/MaaCommonAssets/OCR`。
-- `.github/cliff.toml` 的 `[remote.github]` 必须保持：`owner = "yilingpig"`，`repo = "MaaKatana"`。
-- `install.yml` 中 `git-cliff` 步骤需要 `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`，否则 GitHub API 可能因未认证而 403 限流。
-- `changelog` job 需要 `permissions: contents: read` 和 `pull-requests: read`。
-- `release` job 需要 `permissions: contents: write`。
-- 不要重跑旧 tag 来验证 workflow 修复；旧 tag 指向旧提交。修复 workflow 后提交到 `main`，再创建新的 tag。
-- 示例发布：`git tag -a v0.1.4 -m "Fix changelog permissions"`，然后 `git push origin v0.1.4`。
+1. 编辑 `assets` 后同步 `install/resource`。
+2. 解析 Pipeline JSON；检查 `next`、`on_error` 以及 `build_node`、`next_node`、`hit_node`、`miss_node` 的全部引用。
+3. 对改动的 Python 文件执行 `python -m py_compile`。
+4. 发布相关改动解析 workflow YAML、`cliff.toml`，并运行 `git diff --check`。
+5. 核对真实日志、完成 review，并明确未验证的风险。
+6. 未获当轮明确授权时，不提交、不推送、不打标签、不发布。
 
-## 推荐校验入口
+推荐命令（项目根目录）：
 
 ```powershell
-Set-Location -LiteralPath 'F:\JUSTFORFUN\MaaKatana-main'
 .\tools\run_project_checks.ps1
+# 快速检查：.\tools\run_project_checks.ps1 -SkipSchema
 ```
 
-快速检查可使用：
+## 10. 新对话首轮操作
 
-```powershell
-.\tools\run_project_checks.ps1 -SkipSchema
-```
-## 常用校验
-
-```powershell
-Get-Content -Raw -LiteralPath 'F:\JUSTFORFUN\MaaKatana-main\assets\interface.json' | ConvertFrom-Json
-Get-Content -Raw -LiteralPath 'F:\JUSTFORFUN\MaaKatana-main\assets\resource\pipeline\Pipeline7.json' | ConvertFrom-Json
-python -m py_compile `
-  'F:\JUSTFORFUN\MaaKatana-main\agent\building_router.py' `
-  'F:\JUSTFORFUN\MaaKatana-main\agent\quantity_router.py' `
-  'F:\JUSTFORFUN\MaaKatana-main\agent\recognition_click.py' `
-  'F:\JUSTFORFUN\MaaKatana-main\agent\main.py'
-python 'F:\JUSTFORFUN\MaaKatana-main\tools\configure.py'
-```
-
-发布相关校验：
-
-```powershell
-git diff --check
-python -c "import yaml; yaml.safe_load(open(r'F:\JUSTFORFUN\MaaKatana-main\.github\workflows\install.yml', encoding='utf-8')); print('yaml-ok')"
-python -c "import tomllib; tomllib.load(open(r'F:\JUSTFORFUN\MaaKatana-main\.github\cliff.toml','rb')); print('cliff-toml-ok')"
-```
-
-## 调试重点
-
-- 使用正式 UI 的 `收集产物` 入口测试主链路。
-- 观察 `点击钢铁` 日志是否出现 `algorithm=FeatureMatch`。
-- 确认 `点击识别框中心` 点击坐标是否落在实际钢铁图标位置。
-- 如果点击后没有进入钢铁制造窗口，检查 `点击钢铁.png` 是否截取了真正可点击图标，并关注 FeatureMatch 是否选错候选框。
-- 若出现“大幅滑动”，从日志中的触摸坐标判断来源：建筑寻找约 100 像素纵向滑动，制造按钮约 280 像素横向滑动，广告寻找约 490 像素纵向滑动。
-- 2026-08-07 调试日志中旧纵向 Swipe 配置约 100 像素，但实际记录出现 `-201`、`-227`、`-247`、`-262` 像素位移，且时长固定为 200ms；当前业务方向仍是向上，纵向寻找节点统一使用 `动态向上滑动`，避免继续使用矩形 Swipe 的超幅输入。
-
-## 维护本文件
-
-- 后续工作若改变 Pipeline 主流程、Agent 注册、发布流程、关键路径、校验命令或已确认的调试结论，应主动更新本文件。
-- 若发现本文件与实际代码不一致，以实际代码和最新日志为准，并立即修正文档。
-- 更新本文件时保持简洁，记录稳定结论，不记录一次性猜测。
+1. 阅读本文件并执行 `git status --short`，确认未提交的迫击炮/武士刀修复仍在。
+2. 确认源 Pipeline 与 `install/resource/pipeline/Pipeline7.json` 一致。
+3. 重载 VS Code MaaFramework Support 或重启 VS Code，运行 `收集产物`。
+4. 日志预期：全部收集未命中后，`寻找迫击炮` 出现 `Action.Starting` 并显式跳转；不应再循环 `事务处 NextList.Failed`。
+5. 修复确认并校验通过后，先向用户报告；只有获取新的明确授权才进行 Git 操作。

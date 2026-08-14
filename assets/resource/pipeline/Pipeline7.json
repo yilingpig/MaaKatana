@@ -447,20 +447,21 @@
         "y": 1309
       }
     },
-    "next": [
-      "点击武士刀"
-    ],
-    "on_error": [
-      "向上滑动"
-    ],
-    "recognition": {
+    "action": {
+      "type": "Custom",
       "param": {
-        "template": [
-          "铁匠铺.png"
-        ]
-      },
-      "type": "TemplateMatch"
-    }
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "铁匠铺.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击武士刀",
+          "miss_node": "向上滑动"
+        }
+      }
+    },
+    "timeout": 60000
   },
   "寻找迫击炮": {
     "$__mpe_code": {
@@ -469,20 +470,21 @@
         "y": 1595
       }
     },
-    "next": [
-      "点击迫击炮"
-    ],
-    "on_error": [
-      "寻找武士刀"
-    ],
-    "recognition": {
+    "action": {
+      "type": "Custom",
       "param": {
-        "template": [
-          "工作室.png"
-        ]
-      },
-      "type": "TemplateMatch"
-    }
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "工作室.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击迫击炮",
+          "miss_node": "寻找武士刀"
+        }
+      }
+    },
+    "timeout": 60000
   },
   "广告加载完成": {
     "$__mpe_code": {
@@ -1345,7 +1347,7 @@
           "hit_node": "点击船",
           "miss_node": "向上滑动寻找船",
           "max_misses": 6,
-          "fallback_node": "商队"
+          "fallback_node": "点击商队"
         }
       }
     },
@@ -1409,7 +1411,7 @@
       "检查船界面"
     ],
     "on_error": [
-      "商队"
+      "点击商队"
     ],
     "timeout": 60000
   },
@@ -1430,7 +1432,7 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击勘探",
-          "miss_node": "商队"
+          "miss_node": "点击商队"
         }
       }
     },
@@ -1460,7 +1462,7 @@
       "向上滑动寻找派遣"
     ],
     "on_error": [
-      "商队"
+      "点击商队"
     ],
     "timeout": 60000
   },
@@ -1540,13 +1542,251 @@
         "threshold": 0.7
       }
     },
+    "next": [
+      "点击商队"
+    ],
     "timeout": 60000
   },
-  "商队": {
+  "点击商队": {
     "$__mpe_code": {
       "position": {
-        "x": 3990,
+        "x": 4180,
         "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "商队.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "next": [
+      "检查商队界面"
+    ],
+    "on_error": [
+      "检查汽船"
+    ],
+    "timeout": 60000
+  },
+  "检查商队界面": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4370,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "商队界面识别.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击罗马",
+          "miss_node": "检查汽船"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击罗马": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4750,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击罗马图片确认",
+          "点击罗马文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "检查罗马雷雨"
+    ],
+    "on_error": [
+      "检查汽船"
+    ],
+    "timeout": 60000
+  },
+  "检查罗马雷雨": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4940,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "雷雨.png"
+          ],
+          "threshold": 0.7,
+          "roi": [
+            760,
+            360,
+            180,
+            60
+          ],
+          "hit_node": "向上大幅滑动检查停止交易",
+          "miss_node": "向上滑到底"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "向上大幅滑动检查停止交易": {
+    "$__mpe_code": {
+      "position": {
+        "x": 5130,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          650,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            90,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "检查停止交易"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "检查停止交易": {
+    "$__mpe_code": {
+      "position": {
+        "x": 5320,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "这座城市暂时停止交易.png"
+          ],
+          "threshold": 0.8,
+          "text": "这座城市暂时停止交易",
+          "hit_node": "向下大幅滑动回来",
+          "miss_node": "向下大幅滑动回到交易底部"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "向下大幅滑动回来": {
+    "$__mpe_code": {
+      "position": {
+        "x": 5510,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          90,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            650,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "点击雅典"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "点击罗马图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 4940,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "罗马.png"
+        ],
+        "count": 4,
+        "ratio": 0.6
+      }
+    }
+  },
+  "点击罗马文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 5130,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "罗马"
+        ],
+        "order_by": "Expected",
+        "roi": [
+          480,
+          350,
+          220,
+          80
+        ]
       }
     }
   },
@@ -1587,6 +1827,1318 @@
           1280,
           720
         ]
+      }
+    }
+  },
+  "点击雅典": {
+    "$__mpe_code": {
+      "position": {
+        "x": 5700,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击雅典图片确认",
+          "点击雅典文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "检查雅典雷雨"
+    ],
+    "on_error": [
+      "检查汽船"
+    ],
+    "timeout": 60000
+  },
+  "检查雅典雷雨": {
+    "$__mpe_code": {
+      "position": {
+        "x": 5890,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "雷雨.png"
+          ],
+          "threshold": 0.7,
+          "roi": [
+            760,
+            315,
+            180,
+            60
+          ],
+          "hit_node": "向上大幅滑动检查雅典停止交易",
+          "miss_node": "向上滑到底"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "向上大幅滑动检查雅典停止交易": {
+    "$__mpe_code": {
+      "position": {
+        "x": 6080,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          650,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            90,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "检查雅典停止交易"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "检查雅典停止交易": {
+    "$__mpe_code": {
+      "position": {
+        "x": 6270,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "这座城市暂时停止交易.png"
+          ],
+          "threshold": 0.8,
+          "text": "这座城市暂时停止交易",
+          "hit_node": "向下滑动回来雅典",
+          "miss_node": "向下大幅滑动回到交易底部"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "向下滑动回来雅典": {
+    "$__mpe_code": {
+      "position": {
+        "x": 6460,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          90,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            650,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "点击西安"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "向上滑到底": {
+    "$__mpe_code": {
+      "position": {
+        "x": 6650,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          650,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            90,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "点击财宝第一次"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "点击财宝第一次": {
+    "$__mpe_code": {
+      "position": {
+        "x": 6840,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "财宝.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "roi": [
+          675,
+          365,
+          80,
+          75
+        ]
+      }
+    },
+    "next": [
+      "点击财宝第二次"
+    ],
+    "on_error": [
+      "检查汽船"
+    ],
+    "timeout": 60000
+  },
+  "点击财宝第二次": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7030,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "财宝.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "roi": [
+          675,
+          365,
+          80,
+          75
+        ]
+      }
+    },
+    "next": [
+      "点击金锭第一次"
+    ],
+    "on_error": [
+      "检查汽船"
+    ],
+    "timeout": 60000
+  },
+  "点击金锭第一次": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7220,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "金锭.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "roi": [
+          600,
+          365,
+          75,
+          75
+        ]
+      }
+    },
+    "next": [
+      "点击金锭第二次"
+    ],
+    "on_error": [
+      "检查汽船"
+    ],
+    "timeout": 60000
+  },
+  "点击金锭第二次": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7410,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "金锭.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "roi": [
+          600,
+          365,
+          75,
+          75
+        ]
+      }
+    },
+    "next": [
+      "点击商队派遣"
+    ],
+    "on_error": [
+      "检查汽船"
+    ],
+    "timeout": 60000
+  },
+  "点击商队派遣": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7600,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "派遣.png"
+        ],
+        "threshold": 0.8,
+        "roi": [
+          400,
+          0,
+          480,
+          720
+        ]
+      }
+    },
+    "next": [
+      "检查汽船"
+    ],
+    "on_error": [
+      "检查汽船"
+    ],
+    "timeout": 60000
+  },
+  "点击雅典图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 5700,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "雅典.png"
+        ],
+        "count": 4,
+        "ratio": 0.6
+      }
+    }
+  },
+  "点击雅典文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 5890,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "雅典"
+        ],
+        "order_by": "Expected",
+        "roi": [
+          480,
+          300,
+          220,
+          80
+        ]
+      }
+    }
+  },
+  "向下大幅滑动回到交易底部": {
+    "$__mpe_code": {
+      "position": {
+        "x": 5700,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          90,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            650,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "点击财宝第一次"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "点击西安图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 6650,
+        "y": 2282
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "西安.png"
+        ],
+        "count": 4,
+        "ratio": 0.6
+      }
+    }
+  },
+  "点击西安": {
+    "$__mpe_code": {
+      "position": {
+        "x": 6650,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击西安图片确认",
+          "点击西安文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "检查西安雷雨"
+    ],
+    "on_error": [
+      "检查汽船"
+    ],
+    "timeout": 60000
+  },
+  "点击西安文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 6840,
+        "y": 2282
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "西安"
+        ],
+        "order_by": "Expected",
+        "roi": [
+          480,
+          150,
+          220,
+          80
+        ]
+      }
+    }
+  },
+  "检查西安雷雨": {
+    "$__mpe_code": {
+      "position": {
+        "x": 6840,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "雷雨.png"
+          ],
+          "threshold": 0.7,
+          "roi": [
+            760,
+            180,
+            180,
+            60
+          ],
+          "hit_node": "向上大幅滑动检查西安停止交易",
+          "miss_node": "向上滑到底"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "向上大幅滑动检查西安停止交易": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7030,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          650,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            90,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "检查西安停止交易"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "检查西安停止交易": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7220,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "这座城市暂时停止交易.png"
+          ],
+          "threshold": 0.8,
+          "text": "这座城市暂时停止交易",
+          "hit_node": "向下滑动回来西安",
+          "miss_node": "向下大幅滑动回到交易底部"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "向下滑动回来西安": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7410,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          90,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            650,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "检查汽船"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "检查汽船": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7790,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "汽船图标.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击汽船",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击汽船": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7980,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "汽船图片确认",
+          "汽船文字确认"
+        ],
+        "box_index": 0
+      }
+    },
+    "next": [
+      "检查汽船界面"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "汽船图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7980,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "汽船图标.png"
+        ],
+        "count": 4,
+        "ratio": 0.6
+      }
+    }
+  },
+  "汽船文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8170,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "汽船"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "检查汽船界面": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8170,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "汽船界面识别.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击纽约",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击纽约": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8360,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击纽约图片确认",
+          "点击纽约文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "向上滑到底汽船"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击纽约图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8360,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "纽约.png"
+        ],
+        "count": 4,
+        "ratio": 0.6
+      }
+    }
+  },
+  "点击纽约文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8550,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "纽约"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "向上滑到底汽船": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8550,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          650,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            90,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "点击汽船派遣"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "点击汽船派遣": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8740,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "派遣.png"
+        ],
+        "threshold": 0.8,
+        "roi": [
+          400,
+          0,
+          480,
+          720
+        ]
+      }
+    },
+    "next": [
+      "返回公会"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "检查汽船_雷克雅未克": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7790,
+        "y": 2400
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "汽船图标.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击汽船_雷克雅未克",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击汽船_雷克雅未克": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7980,
+        "y": 2400
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "汽船图片确认",
+          "汽船文字确认"
+        ],
+        "box_index": 0
+      }
+    },
+    "next": [
+      "检查汽船界面_雷克雅未克"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "检查汽船界面_雷克雅未克": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8170,
+        "y": 2400
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "汽船界面识别.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击雷克雅未克",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击雷克雅未克": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8360,
+        "y": 2400
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击雷克雅未克图片确认",
+          "点击雷克雅未克文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "向上滑到底汽船"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击雷克雅未克图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8360,
+        "y": 2522
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "雷克雅未克.png"
+        ],
+        "count": 4,
+        "ratio": 0.6
+      }
+    }
+  },
+  "点击雷克雅未克文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8550,
+        "y": 2522
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "雷克雅未克"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "检查汽船_墨西哥": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7790,
+        "y": 2640
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "汽船图标.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击汽船_墨西哥",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击汽船_墨西哥": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7980,
+        "y": 2640
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "汽船图片确认",
+          "汽船文字确认"
+        ],
+        "box_index": 0
+      }
+    },
+    "next": [
+      "检查汽船界面_墨西哥"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "检查汽船界面_墨西哥": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8170,
+        "y": 2640
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "汽船界面识别.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击墨西哥",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击墨西哥": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8360,
+        "y": 2640
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击墨西哥图片确认",
+          "点击墨西哥文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "向上滑到底汽船"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击墨西哥图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8360,
+        "y": 2762
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "墨西哥.png"
+        ],
+        "count": 4,
+        "ratio": 0.6
+      }
+    }
+  },
+  "点击墨西哥文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8550,
+        "y": 2762
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "墨西哥"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "检查汽船_墨尔本": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7790,
+        "y": 2880
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "汽船图标.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击汽船_墨尔本",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击汽船_墨尔本": {
+    "$__mpe_code": {
+      "position": {
+        "x": 7980,
+        "y": 2880
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "汽船图片确认",
+          "汽船文字确认"
+        ],
+        "box_index": 0
+      }
+    },
+    "next": [
+      "检查汽船界面_墨尔本"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "检查汽船界面_墨尔本": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8170,
+        "y": 2880
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "汽船界面识别.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击墨尔本",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击墨尔本": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8360,
+        "y": 2880
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击墨尔本图片确认",
+          "点击墨尔本文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "向上滑到底汽船"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击墨尔本图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8360,
+        "y": 3002
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "墨尔本.png"
+        ],
+        "count": 4,
+        "ratio": 0.6
+      }
+    }
+  },
+  "点击墨尔本文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8550,
+        "y": 3002
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "墨尔本"
+        ],
+        "order_by": "Expected"
       }
     }
   }
