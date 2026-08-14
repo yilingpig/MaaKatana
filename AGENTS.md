@@ -79,6 +79,7 @@
 - `tools/install.py` 桌面端必须同时复制 `install/MaaAgentBinary`（MaaPiCli）和 `install/libs/MaaAgentBinary`（MFAAvalonia）。
 - `.github/cliff.toml`：`owner = "yilingpig"`，`repo = "MaaKatana"`。
 - `install.yml` 的 git-cliff 需要 `GITHUB_TOKEN`；changelog job 需要 contents/pull-requests 读取权限，release job 需要 contents 写入权限。
+- 自动打包只在 `v*` 标签或手动触发时运行，构建矩阵固定为 `win + x86_64`，Artifact 保留 3 天；普通分支和 PR 只运行 `check.yml`，避免重复生成跨平台 Artifact。
 - 修复发布工作流后：提交到 `main`，创建**新标签**，不要重跑旧标签。需要出现在 Release changelog 的提交不得包含 `[skip changelog]`。
 
 ## 9. 校验与交付清单

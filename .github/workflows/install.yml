@@ -11,19 +11,6 @@ on:
   push:
     tags:
       - "v*"
-    branches:
-      - "**"
-    paths:
-      - ".github/workflows/install.yml"
-      - "assets/**"
-      - "**.py"
-  pull_request:
-    branches:
-      - "**"
-    paths:
-      - ".github/workflows/install.yml"
-      - "assets/**"
-      - "**.py"
   workflow_dispatch:
 
 jobs:
@@ -72,8 +59,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [win, macos, linux, android]
-        arch: [aarch64, x86_64]
+        os: [win]
+        arch: [x86_64]
       fail-fast: false
 
     steps:
@@ -142,6 +129,7 @@ jobs:
         with:
           name: MaaKatana-${{ matrix.os }}-${{ matrix.arch }}
           path: "install"
+          retention-days: 3
 
   changelog:
     name: Generate changelog
