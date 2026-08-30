@@ -347,17 +347,17 @@
       "type": "ClickKey"
     },
     "next": [
-      "返回公会"
+      "广告奖励确认"
     ],
     "on_error": [
-      "返回公会"
+      "广告奖励确认"
     ],
     "recognition": {
       "type": "Or",
       "param": {
         "any_of": [
-          "奖励已发放图片确认",
-          "奖励已发放文字确认"
+          "奖励已发放图片确认排除倒计时",
+          "奖励已发放文字确认排除倒计时"
         ]
       }
     },
@@ -380,8 +380,11 @@
           102
         ],
         "template": [
-          "奖励已发放.png"
-        ]
+          "奖励已发放前景.png"
+        ],
+        "green_mask": true,
+        "ratio": 0.6,
+        "count": 4
       },
       "type": "FeatureMatch"
     }
@@ -408,6 +411,67 @@
           "max_mismatches": 1
         }
       }
+    }
+  },
+  "奖励倒计时图片确认": {
+    "recognition": {
+      "param": {
+        "template": [
+          "x秒后可得奖励.png"
+        ],
+        "roi": [
+          1075,
+          2,
+          205,
+          102
+        ],
+        "threshold": 0.7
+      },
+      "type": "TemplateMatch"
+    }
+  },
+  "奖励倒计时未出现": {
+  "recognition": {
+    "type": "Custom",
+    "param": {
+      "custom_recognition": "奖励倒计时不存在确认",
+      "custom_recognition_param": {
+        "template": [
+          "x秒后可得奖励.png"
+        ],
+        "roi": [
+          1075,
+          2,
+          205,
+          102
+        ],
+        "threshold": 0.7
+      }
+    }
+  }
+},
+  "奖励已发放图片确认排除倒计时": {
+    "recognition": {
+      "param": {
+        "all_of": [
+          "奖励已发放图片确认",
+          "奖励倒计时未出现"
+        ],
+        "box_index": 0
+      },
+      "type": "And"
+    }
+  },
+  "奖励已发放文字确认排除倒计时": {
+    "recognition": {
+      "param": {
+        "all_of": [
+          "奖励已发放文字确认",
+          "奖励倒计时未出现"
+        ],
+        "box_index": 0
+      },
+      "type": "And"
     }
   },
   "寻找广告": {
@@ -487,30 +551,30 @@
     "timeout": 60000
   },
   "广告加载完成": {
-    "$__mpe_code": {
-      "position": {
-        "x": 2172,
-        "y": 319
-      }
-    },
-    "inverse": true,
-    "next": [
-      "奖励已发放",
-      "等待广告"
-    ],
-    "on_error": [
-      "点击广告"
-    ],
-    "recognition": {
-      "param": {
-        "template": [
-          "正在处理.png"
-        ]
-      },
-      "type": "TemplateMatch"
-    },
-    "timeout": 40000
+  "$__mpe_code": {
+    "position": {
+      "x": 2172,
+      "y": 319
+    }
   },
+  "inverse": true,
+  "next": [
+    "奖励已发放",
+    "等待广告"
+  ],
+  "on_error": [
+    "广告等待失败终止"
+  ],
+  "recognition": {
+    "param": {
+      "template": [
+        "正在处理.png"
+      ]
+    },
+    "type": "TemplateMatch"
+  },
+  "timeout": 40000
+},
   "开始建造": {
     "$__mpe_code": {
       "position": {
@@ -958,9 +1022,6 @@
     "next": [
       "奖励已发放"
     ],
-    "on_error": [
-      "返回公会"
-    ],
     "recognition": {
       "param": {
         "template": [
@@ -973,46 +1034,46 @@
     "timeout": 40000
   },
   "等待广告加载": {
-    "$__mpe_code": {
-      "position": {
-        "x": 1852,
-        "y": 635
-      }
-    },
-    "next": [
-      "广告加载完成"
-    ],
-    "on_error": [
-      "点击广告"
-    ],
-    "recognition": {
-      "param": {
-        "template": [
-          "正在处理.png"
-        ]
-      },
-      "type": "TemplateMatch"
-    },
-    "timeout": 30000
+  "$__mpe_code": {
+    "position": {
+      "x": 1852,
+      "y": 635
+    }
   },
+  "next": [
+    "广告加载完成"
+  ],
+  "on_error": [
+    "广告等待失败终止"
+  ],
+  "recognition": {
+    "param": {
+      "template": [
+        "正在处理.png"
+      ]
+    },
+    "type": "TemplateMatch"
+  },
+  "timeout": 30000
+},
   "等待广告或奖励": {
-    "$__mpe_code": {
-      "position": {
-        "x": 2172,
-        "y": 713
-      }
-    },
-    "next": [
-      "等待广告加载",
-      "奖励已发放",
-      "等待广告"
-    ],
-    "on_error": [
-      "点击广告"
-    ],
-    "rate_limit": 1000,
-    "timeout": 70000
+  "$__mpe_code": {
+    "position": {
+      "x": 2172,
+      "y": 713
+    }
   },
+  "next": [
+    "等待广告加载",
+    "奖励已发放",
+    "等待广告"
+  ],
+  "on_error": [
+    "广告等待失败终止"
+  ],
+  "rate_limit": 1000,
+  "timeout": 70000
+},
   "返回": {
     "$__mpe_code": {
       "position": {
@@ -2479,7 +2540,7 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击汽船",
-          "miss_node": "返回公会"
+          "miss_node": "检查火车拼图要求"
         }
       }
     },
@@ -2512,7 +2573,7 @@
       "检查汽船界面"
     ],
     "on_error": [
-      "返回公会"
+      "检查火车拼图要求"
     ],
     "timeout": 60000
   },
@@ -2569,7 +2630,7 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击纽约",
-          "miss_node": "返回公会"
+          "miss_node": "检查火车拼图要求"
         }
       }
     },
@@ -2703,7 +2764,7 @@
       }
     },
     "next": [
-      "返回公会"
+      "检查火车拼图要求"
     ],
     "on_error": [
       "返回公会"
@@ -2727,7 +2788,7 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击汽船_雷克雅未克",
-          "miss_node": "返回公会"
+          "miss_node": "检查火车拼图要求"
         }
       }
     },
@@ -2760,7 +2821,7 @@
       "检查汽船界面_雷克雅未克"
     ],
     "on_error": [
-      "返回公会"
+      "检查火车拼图要求"
     ],
     "timeout": 60000
   },
@@ -2781,7 +2842,7 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击雷克雅未克",
-          "miss_node": "返回公会"
+          "miss_node": "检查火车拼图要求"
         }
       }
     },
@@ -2871,7 +2932,7 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击汽船_墨西哥",
-          "miss_node": "返回公会"
+          "miss_node": "检查火车拼图要求"
         }
       }
     },
@@ -2904,7 +2965,7 @@
       "检查汽船界面_墨西哥"
     ],
     "on_error": [
-      "返回公会"
+      "检查火车拼图要求"
     ],
     "timeout": 60000
   },
@@ -2925,7 +2986,7 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击墨西哥",
-          "miss_node": "返回公会"
+          "miss_node": "检查火车拼图要求"
         }
       }
     },
@@ -3015,7 +3076,7 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击汽船_墨尔本",
-          "miss_node": "返回公会"
+          "miss_node": "检查火车拼图要求"
         }
       }
     },
@@ -3048,7 +3109,7 @@
       "检查汽船界面_墨尔本"
     ],
     "on_error": [
-      "返回公会"
+      "检查火车拼图要求"
     ],
     "timeout": 60000
   },
@@ -3069,7 +3130,7 @@
           ],
           "threshold": 0.7,
           "hit_node": "点击墨尔本",
-          "miss_node": "返回公会"
+          "miss_node": "检查火车拼图要求"
         }
       }
     },
@@ -3141,5 +3202,6004 @@
         "order_by": "Expected"
       }
     }
+  },
+  "检查火车拼图要求": {
+    "$__mpe_code": {
+      "position": {
+        "x": 8930,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "火车10×10.png"
+          ],
+          "threshold": 0.7,
+          "text": "完成任意拼图",
+          "require_both": true,
+          "hit_node": "检查玩游戏入口",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "检查玩游戏入口": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9120,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "玩游戏.png"
+          ],
+          "threshold": 0.75,
+          "text": "玩游戏",
+          "require_both": true,
+          "hit_node": "点击玩游戏",
+          "miss_node": "返回寻找玩游戏"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "返回寻找玩游戏": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9120,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "ClickKey",
+      "param": {
+        "key": [
+          4
+        ]
+      }
+    },
+    "next": [
+      "检查玩游戏入口"
+    ],
+    "pre_wait_freezes": 1000,
+    "rate_limit": 1000
+  },
+  "点击玩游戏": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9310,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击玩游戏图片确认",
+          "点击玩游戏文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "点击其他用户的作品"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击玩游戏图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9310,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "玩游戏.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "order_by": "Score",
+        "index": 0
+      }
+    }
+  },
+  "点击玩游戏文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9500,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "玩游戏"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "点击其他用户的作品": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9500,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击其他用户的作品图片确认",
+          "点击其他用户的作品文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "点击重量级别"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击其他用户的作品图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9500,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "其他用户的作品.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "order_by": "Score",
+        "index": 0
+      }
+    }
+  },
+  "点击其他用户的作品文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9690,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "其他用户的作品"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "点击重量级别": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9690,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击重量级别图片确认",
+          "点击重量级别文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "检查10×10黑白"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击重量级别图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9690,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "重量级别.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "order_by": "Score",
+        "index": 0
+      }
+    }
+  },
+  "点击重量级别文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9880,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "重量级别"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "检查10×10黑白": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9880,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "1010黑白.png"
+          ],
+          "threshold": 0.7,
+          "text": "10x10",
+          "require_both": true,
+          "hit_node": "点击10×10黑白",
+          "miss_node": "向上小幅滑动寻找15×15"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击10×10黑白": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10070,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击10×10黑白图片确认",
+          "点击10×10黑白文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "点击第一张黑白图"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击10×10黑白图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10070,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "1010黑白.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "order_by": "Score",
+        "index": 0
+      }
+    }
+  },
+  "点击10×10黑白文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10260,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "10x10",
+          "10×10",
+          "10X10"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "向上小幅滑动寻找15×15": {
+    "$__mpe_code": {
+      "position": {
+        "x": 9880,
+        "y": 2400
+      }
+    },
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          640,
+          520,
+          40,
+          40
+        ],
+        "end": [
+          [
+            640,
+            360,
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    "next": [
+      "检查15×15黑白"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "检查15×15黑白": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10070,
+        "y": 2400
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "1515黑白.png"
+          ],
+          "threshold": 0.7,
+          "text": "15x15",
+          "require_both": true,
+          "hit_node": "点击15×15黑白",
+          "miss_node": "返回公会"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击15×15黑白": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10260,
+        "y": 2400
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击15×15黑白图片确认",
+          "点击15×15黑白文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "点击第一张黑白图"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击15×15黑白图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10260,
+        "y": 2522
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "1515黑白.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "order_by": "Score",
+        "index": 0
+      }
+    }
+  },
+  "点击15×15黑白文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10450,
+        "y": 2522
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "15x15",
+          "15×15",
+          "15X15"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "点击第一张黑白图": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10260,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "黑白图识别.png"
+        ],
+        "threshold": 0.7,
+        "order_by": "Horizontal",
+        "index": 0
+      }
+    },
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000,
+    "next": [
+      "检查道具栏"
+    ]
+  },
+  "检查道具栏": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10450,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "道具栏.png"
+          ],
+          "threshold": 0.9,
+          "hit_node": "点击道具栏",
+          "miss_node": "等待道具栏重试"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "等待道具栏重试": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10450,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "检查道具栏"
+    ],
+    "pre_wait_freezes": 1000,
+    "rate_limit": 1000
+  },
+  "点击道具栏": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10640,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "道具栏.png"
+        ],
+        "threshold": 0.9,
+        "order_by": "Score",
+        "index": 0
+      }
+    },
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000,
+    "next": [
+      "等待道具栏展开"
+    ]
+  },
+  "点击大型武器": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10830,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "大型武器.png"
+        ],
+        "threshold": 0.7,
+        "order_by": "Score",
+        "index": 0
+      }
+    },
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000,
+    "next": [
+      "检查机器人按钮"
+    ]
+  },
+  "检查机器人按钮": {
+    "$__mpe_code": {
+      "position": {
+        "x": 11020,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "机器人.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击机器人",
+          "miss_node": "点击大型武器"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击机器人": {
+    "$__mpe_code": {
+      "position": {
+        "x": 11210,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "机器人.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000,
+    "next": [
+      "等待机器人使用确认"
+    ]
+  },
+  "等待机器人使用确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 11400,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "检查机器人使用确认"
+    ],
+    "pre_wait_freezes": 1000,
+    "rate_limit": 1000
+  },
+  "检查机器人使用确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 11590,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "机器人使用确认.png"
+          ],
+          "threshold": 0.7,
+          "text": "填充100%的拼图",
+          "require_both": true,
+          "hit_node": "点击机器人确认对勾",
+          "miss_node": "机器人已用完等待人工完成"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击机器人确认对勾": {
+    "$__mpe_code": {
+      "position": {
+        "x": 11780,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "对勾.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000,
+    "next": [
+      "等待继续或通关"
+    ]
+  },
+  "机器人已用完等待人工完成": {
+    "$__mpe_code": {
+      "position": {
+        "x": 11780,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "识别并完成黑白数织",
+        "custom_action_param": {
+          "success_node": "等待继续或通关",
+          "failure_node": "人工解谜失败等待",
+          "close_overlay_with_back": true,
+          "pause": 0.08
+        }
+      }
+    },
+    "timeout": 180000
+  },
+  "人工解谜失败等待": {
+    "$__mpe_code": {
+      "position": {
+        "x": 11970,
+        "y": 2400
+      }
+    }
+  },
+  "等待道具栏展开": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10735,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "检查大型武器"
+    ],
+    "pre_wait_freezes": 700,
+    "rate_limit": 700
+  },
+  "检查大型武器": {
+    "$__mpe_code": {
+      "position": {
+        "x": 10925,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "大型武器.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "点击大型武器",
+          "miss_node": "检查道具栏"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "等待继续或通关": {
+    "$__mpe_code": {
+      "position": {
+        "x": 11970,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "检查恭喜过关"
+    ],
+    "pre_wait_freezes": 700,
+    "rate_limit": 700
+  },
+  "检查恭喜过关": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12160,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "恭喜过关了.png"
+          ],
+          "threshold": 0.7,
+          "text": "恭喜过关了",
+          "require_both": true,
+          "hit_node": "点击过关确认是",
+          "miss_node": "检查继续"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "检查继续": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12350,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "继续.png"
+          ],
+          "threshold": 0.75,
+          "text": "继续",
+          "require_both": true,
+          "hit_node": "点击继续",
+          "miss_node": "等待继续或通关"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "点击继续": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12540,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击继续图片确认",
+          "点击继续文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "等待继续或通关"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击继续图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12540,
+        "y": 2282
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "继续.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "order_by": "Score",
+        "index": 0
+      }
+    }
+  },
+  "点击继续文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12730,
+        "y": 2282
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "继续"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "点击过关确认是": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12350,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击过关确认是图片确认",
+          "点击过关确认是文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "等待战利品"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击过关确认是图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12350,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "是.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "order_by": "Score",
+        "index": 0
+      }
+    }
+  },
+  "点击过关确认是文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12540,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "是"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "等待战利品": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12540,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "检查战利品"
+    ],
+    "pre_wait_freezes": 700,
+    "rate_limit": 700
+  },
+  "检查战利品": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12730,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "战利品！.png"
+          ],
+          "threshold": 0.7,
+          "text": "战利品",
+          "require_both": true,
+          "hit_node": "返回战利品",
+          "miss_node": "等待战利品"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "返回战利品": {
+    "$__mpe_code": {
+      "position": {
+        "x": 12920,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "ClickKey",
+      "param": {
+        "key": [
+          4
+        ]
+      }
+    },
+    "next": [
+      "检查主界面公会"
+    ],
+    "pre_wait_freezes": 700,
+    "rate_limit": 700
+  },
+  "检查主界面公会": {
+    "$__mpe_code": {
+      "position": {
+        "x": 13110,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "图文条件并跳转",
+        "custom_action_param": {
+          "template": [
+            "公会.png"
+          ],
+          "threshold": 0.75,
+          "text": "公会",
+          "require_both": true,
+          "hit_node": "点击主界面公会",
+          "miss_node": "继续返回主界面"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "继续返回主界面": {
+    "$__mpe_code": {
+      "position": {
+        "x": 13110,
+        "y": 2160
+      }
+    },
+    "action": {
+      "type": "ClickKey",
+      "param": {
+        "key": [
+          4
+        ]
+      }
+    },
+    "next": [
+      "检查主界面公会"
+    ],
+    "pre_wait_freezes": 1000,
+    "rate_limit": 1000
+  },
+  "点击主界面公会": {
+    "$__mpe_code": {
+      "position": {
+        "x": 13300,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "点击识别框中心"
+      }
+    },
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          "点击主界面公会图片确认",
+          "点击主界面公会文字确认"
+        ],
+        "box_index": 1
+      }
+    },
+    "next": [
+      "等待公会界面"
+    ],
+    "on_error": [
+      "返回公会"
+    ],
+    "timeout": 60000
+  },
+  "点击主界面公会图片确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 13300,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "FeatureMatch",
+      "param": {
+        "detector": "SIFT",
+        "template": [
+          "公会.png"
+        ],
+        "count": 4,
+        "ratio": 0.6,
+        "order_by": "Score",
+        "index": 0
+      }
+    }
+  },
+  "点击主界面公会文字确认": {
+    "$__mpe_code": {
+      "position": {
+        "x": 13490,
+        "y": 2042
+      }
+    },
+    "recognition": {
+      "type": "OCR",
+      "param": {
+        "expected": [
+          "公会"
+        ],
+        "order_by": "Expected"
+      }
+    }
+  },
+  "等待公会界面": {
+    "$__mpe_code": {
+      "position": {
+        "x": 13490,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "检查已进入公会"
+    ],
+    "pre_wait_freezes": 1000,
+    "rate_limit": 1000
+  },
+  "检查已进入公会": {
+    "$__mpe_code": {
+      "position": {
+        "x": 13680,
+        "y": 1920
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "检查建筑并跳转",
+        "custom_action_param": {
+          "template": [
+            "公会顶栏.png"
+          ],
+          "threshold": 0.7,
+          "hit_node": "火车拼图流程结束",
+          "miss_node": "等待公会界面"
+        }
+      }
+    },
+    "timeout": 60000
+  },
+  "火车拼图流程结束": {
+    "$__mpe_code": {
+      "position": {
+        "x": 13870,
+        "y": 1920
+      }
+    }
+  },
+  "黑白数织测试": {
+    "$__mpe_code": {
+      "position": {
+        "x": 14500,
+        "y": 2640
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "识别并完成黑白数织",
+        "custom_action_param": {
+          "success_node": "黑白数织测试完成",
+          "failure_node": "黑白数织测试失败",
+          "close_overlay_with_back": true,
+          "pause": 0.08
+        }
+      }
+    },
+    "timeout": 180000
+  },
+  "黑白数织测试完成": {
+    "$__mpe_code": {
+      "position": {
+        "x": 14690,
+        "y": 2520
+      }
+    }
+  },
+  "黑白数织测试失败": {
+    "$__mpe_code": {
+      "position": {
+        "x": 14690,
+        "y": 2760
+      }
+    }
+  },
+  "ColorNonogram1080pPaintTest": {
+    "$__mpe_code": {
+      "position": {
+        "x": 14500,
+        "y": 4080
+      }
+    },
+    "action": {
+      "type": "Custom",
+      "param": {
+        "custom_action": "ColorNonogram1080pPaintTest",
+        "custom_action_param": {
+          "mode": "paint_test",
+          "allow_paint": false,
+          "expected_resolution": [
+            1920,
+            1080
+          ],
+          "pause": 0.08,
+          "stability_delay": 0.15,
+          "fast_paint": true,
+          "fast_paint_settle_initial": 0.06,
+          "fast_paint_settle_poll": 0.04,
+          "fast_paint_settle_timeout": 0.65,
+          "completion_wait": 0.5,
+          "success_node": "ColorNonogram1080pPaintTestSuccess",
+          "failure_node": "ColorNonogram1080pPaintTestFailure"
+        }
+      }
+    },
+    "timeout": 300000
+  },
+  "ColorNonogram1080pPaintTestSuccess": {
+    "$__mpe_code": {
+      "position": {
+        "x": 14690,
+        "y": 3960
+      }
+    }
+  },
+  "ColorNonogram1080pPaintTestFailure": {
+    "$__mpe_code": {
+      "position": {
+        "x": 14690,
+        "y": 4200
+      }
+    }
+  },
+  "商店购买": {
+    "action": {
+      "type": "Click"
+    },
+    "next": [
+      "等待商店页面"
+    ],
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "商店.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "timeout": 60000
+  },
+  "等待商店页面": {
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "点击武士刀商店"
+    ],
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "商店页面.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "timeout": 30000
+  },
+  "点击武士刀商店": {
+    "action": {
+      "type": "Click"
+    },
+    "next": [
+      "等待购买武士刀界面"
+    ],
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "武士刀商店.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "timeout": 30000
+  },
+  "等待购买武士刀界面": {
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "滑动购买武士刀"
+    ],
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "购买武士刀界面.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "timeout": 30000
+  },
+  "滑动购买武士刀": {
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          485,
+          437,
+          20,
+          20
+        ],
+        "end": [
+          [
+            780,
+            437,
+            20,
+            20
+          ]
+        ]
+      }
+    },
+    "next": [
+      "购买武士刀"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "购买武士刀": {
+    "action": {
+      "type": "Click"
+    },
+    "next": [
+      "等待武士刀购买完成"
+    ],
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          {
+            "recognition": {
+              "type": "OCR",
+              "param": {
+                "expected": [
+                  "购买"
+                ],
+                "roi": [
+                  635,
+                  480,
+                  230,
+                  75
+                ],
+                "order_by": "Expected"
+              }
+            }
+          },
+          {
+            "recognition": {
+              "type": "TemplateMatch",
+              "param": {
+                "template": [
+                  "购买按钮.png"
+                ],
+                "threshold": 0.7
+              }
+            }
+          }
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 30000
+  },
+  "等待武士刀购买完成": {
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "点击铁砂商店"
+    ],
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "商店页面.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "timeout": 30000
+  },
+  "点击铁砂商店": {
+    "action": {
+      "type": "Click"
+    },
+    "next": [
+      "等待购买铁砂界面"
+    ],
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "铁砂.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "timeout": 30000
+  },
+  "等待购买铁砂界面": {
+    "action": {
+      "type": "DoNothing"
+    },
+    "next": [
+      "滑动购买铁砂"
+    ],
+    "recognition": {
+      "type": "TemplateMatch",
+      "param": {
+        "template": [
+          "购买铁砂界面.png"
+        ],
+        "threshold": 0.7
+      }
+    },
+    "timeout": 30000
+  },
+  "滑动购买铁砂": {
+    "action": {
+      "type": "Swipe",
+      "param": {
+        "begin": [
+          485,
+          437,
+          20,
+          20
+        ],
+        "end": [
+          [
+            780,
+            437,
+            20,
+            20
+          ]
+        ]
+      }
+    },
+    "next": [
+      "购买铁砂"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+  },
+  "购买铁砂": {
+    "action": {
+      "type": "Click"
+    },
+    "next": [
+      "返回商店购买"
+    ],
+    "recognition": {
+      "type": "And",
+      "param": {
+        "all_of": [
+          {
+            "recognition": {
+              "type": "OCR",
+              "param": {
+                "expected": [
+                  "购买"
+                ],
+                "roi": [
+                  635,
+                  480,
+                  230,
+                  75
+                ],
+                "order_by": "Expected"
+              }
+            }
+          },
+          {
+            "recognition": {
+              "type": "TemplateMatch",
+              "param": {
+                "template": [
+                  "购买按钮.png"
+                ],
+                "threshold": 0.7
+              }
+            }
+          }
+        ],
+        "box_index": 0
+      }
+    },
+    "timeout": 30000
+  },
+  "返回商店购买": {
+    "action": {
+      "type": "ClickKey",
+      "param": {
+        "key": [
+          4
+        ]
+      }
+    }
+  },
+  "广告奖励确认": {
+    "recognition": {
+      "param": {
+        "any_of": [
+          "广告奖励确认+1图片",
+          "广告奖励确认019图片",
+          "广告奖励确认020图片",
+          "广告奖励确认文字"
+        ]
+      },
+      "type": "Or"
+    },
+    "next": [
+      "返回公会"
+    ],
+    "timeout": 20000
+  },
+  "广告奖励确认+1图片": {
+    "$__mpe_code": {
+      "position": {
+        "x": 732,
+        "y": 12
+      }
+    },
+    "recognition": {
+      "param": {
+        "detector": "SIFT",
+        "roi": [
+          337,
+          490,
+          599,
+          186
+        ],
+        "template": [
+          "+1治愈药水感谢您.png"
+        ]
+      },
+      "type": "FeatureMatch"
+    }
+  },
+  "广告奖励确认019图片": {
+    "$__mpe_code": {
+      "position": {
+        "x": 812,
+        "y": 12
+      }
+    },
+    "recognition": {
+      "param": {
+        "detector": "SIFT",
+        "roi": [
+          337,
+          490,
+          599,
+          186
+        ],
+        "template": [
+          "治愈药水019.png"
+        ]
+      },
+      "type": "FeatureMatch"
+    }
+  },
+  "广告奖励确认020图片": {
+    "$__mpe_code": {
+      "position": {
+        "x": 892,
+        "y": 12
+      }
+    },
+    "recognition": {
+      "param": {
+        "detector": "SIFT",
+        "roi": [
+          337,
+          490,
+          599,
+          186
+        ],
+        "template": [
+          "治愈药水020.png"
+        ]
+      },
+      "type": "FeatureMatch"
+    }
+  },
+  "广告奖励确认文字": {
+    "$__mpe_code": {
+      "position": {
+        "x": 972,
+        "y": 12
+      }
+    },
+    "recognition": {
+      "param": {
+        "expected": [
+          "治愈药水"
+        ],
+        "order_by": "Expected",
+        "roi": [
+          337,
+          490,
+          599,
+          186
+        ]
+      },
+      "type": "OCR"
+    }
   }
+,
+  "广告等待失败终止": {
+  "action": {
+    "type": "DoNothing"
+  }
+},
+
+    "进入交易所交换": {
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    583,
+                    0,
+                    58,
+                    70
+                ]
+            }
+        },
+        "next": [
+            "扫描交易所商品"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "template": [
+                    "公会顶栏.png"
+                ],
+                "threshold": 0.7
+            }
+        },
+        "timeout": 60000
+    },
+    "扫描交易所商品": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "交易所商品扫描并跳转",
+                "custom_action_param": {
+                    "products": [
+                        {"item": "木梁", "template": "交换木梁.png", "text": "木梁", "next_node": "交换木梁"},
+                        {"item": "钢铁", "template": "交换钢铁.png", "text": "钢铁", "next_node": "交换钢铁"},
+                        {"item": "火药", "template": "交换火药.png", "text": "火药", "next_node": "交换火药"},
+                        {"item": "铁砂", "template": "交换铁砂.png", "text": "铁砂", "next_node": "交换铁砂"},
+                        {"item": "化学品", "template": "交换化学品.png", "text": "化学品", "next_node": "交换化学品"},
+                        {"item": "海枣", "template": "交换海枣.png", "text": "海枣", "next_node": "交换海枣"},
+                        {"item": "木材", "template": "加密币交换木材.png", "threshold": 0.55, "text": "木材", "source_text": "加密币", "next_node": "交换木材"},
+                        {"item": "石头", "template": "加密币交换石头.png", "threshold": 0.55, "text": "石头", "source_text": "加密币", "next_node": "交换石头"}
+                    ],
+                    "max_swipes": 8,
+                    "gated_max_swipes": 20,
+                    "large_max_swipes": 8,
+                    "small_step": 100,
+                    "gated_step": 150,
+                    "large_start_y": 600,
+                    "large_end_y": 300,
+                    "large_duration": 600,
+                    "swipe_interval": 900,
+                    "completion_gate": {"template": "观看广告字样.png", "text": "观看广告"},
+                    "bedouin_gate": {"template": "贝多因人.png", "text": "贝多因人"},
+                    "heretic_gate": {"template": "异教徒.png", "text": "异教徒"},
+                    "start_x": 640,
+                    "start_y": 450,
+                    "duration": 400,
+                    "failure_node": "交易所交换失败",
+                    "success_node": "交易所交换完成"
+                }
+            }
+        },
+        "timeout": 180000
+    },
+    "交换木梁": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木梁界面"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换木梁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木梁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "等待交换木梁界面": {
+        "action": {
+            "type": "DoNothing"
+        },
+        "next": [
+            "滑动交换木梁"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换木梁界面.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木梁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "滑动交换木梁": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并滑动交易滑条",
+            "custom_action_param": {
+                "window_template": "交换木梁界面.png",
+                "window_threshold": 0.7,
+                "dark_threshold": 175,
+                "duration": 400,
+                "next_node": "购买交换木梁",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "购买交换木梁"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+},
+    "购买交换木梁": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并识别购买按钮",
+            "custom_action_param": {
+                "window_template": "交换木梁界面.png",
+                "window_threshold": 0.7,
+                "button_template": "购买按钮.png",
+                "button_threshold": 0.7,
+                "next_node": "扫描交易所商品",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "扫描交易所商品"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ]
+},
+    "交易所small滑动寻找木梁1": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木梁扫描1"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木梁扫描1": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木梁界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找木梁2"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换木梁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木梁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找木梁2": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木梁扫描2"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木梁扫描2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木梁界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找木梁3"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换木梁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木梁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找木梁3": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木梁扫描3"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木梁扫描3": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木梁界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找木梁4"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换木梁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木梁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找木梁4": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木梁扫描4"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木梁扫描4": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木梁界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找木梁5"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换木梁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木梁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找木梁5": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木梁扫描5"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木梁扫描5": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木梁界面"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换木梁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木梁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交换钢铁": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换钢铁界面"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换钢铁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "钢铁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "等待交换钢铁界面": {
+        "action": {
+            "type": "DoNothing"
+        },
+        "next": [
+            "滑动交换钢铁"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换钢铁界面.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "钢铁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "滑动交换钢铁": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并滑动交易滑条",
+            "custom_action_param": {
+                "window_template": "交换钢铁界面.png",
+                "window_threshold": 0.7,
+                "dark_threshold": 175,
+                "duration": 400,
+                "next_node": "购买交换钢铁",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "购买交换钢铁"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+},
+    "购买交换钢铁": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并识别购买按钮",
+            "custom_action_param": {
+                "window_template": "交换钢铁界面.png",
+                "window_threshold": 0.7,
+                "button_template": "购买按钮.png",
+                "button_threshold": 0.7,
+                "next_node": "扫描交易所商品",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "扫描交易所商品"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ]
+},
+    "交易所small滑动寻找钢铁1": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换钢铁扫描1"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换钢铁扫描1": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换钢铁界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找钢铁2"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换钢铁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "钢铁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找钢铁2": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换钢铁扫描2"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换钢铁扫描2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换钢铁界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找钢铁3"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换钢铁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "钢铁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找钢铁3": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换钢铁扫描3"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换钢铁扫描3": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换钢铁界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找钢铁4"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换钢铁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "钢铁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找钢铁4": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换钢铁扫描4"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换钢铁扫描4": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换钢铁界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找钢铁5"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换钢铁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "钢铁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找钢铁5": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换钢铁扫描5"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换钢铁扫描5": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换钢铁界面"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换钢铁.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "钢铁"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交换火药": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换火药界面"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换火药.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "火药"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "等待交换火药界面": {
+        "action": {
+            "type": "DoNothing"
+        },
+        "next": [
+            "滑动交换火药"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换火药界面.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "火药"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "滑动交换火药": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并滑动交易滑条",
+            "custom_action_param": {
+                "window_template": "交换火药界面.png",
+                "window_threshold": 0.7,
+                "dark_threshold": 175,
+                "duration": 400,
+                "next_node": "购买交换火药",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "购买交换火药"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+},
+    "购买交换火药": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并识别购买按钮",
+            "custom_action_param": {
+                "window_template": "交换火药界面.png",
+                "window_threshold": 0.7,
+                "button_template": "购买按钮.png",
+                "button_threshold": 0.7,
+                "next_node": "扫描交易所商品",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "扫描交易所商品"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ]
+},
+    "交易所small滑动寻找火药1": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换火药扫描1"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换火药扫描1": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换火药界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找火药2"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换火药.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "火药"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找火药2": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换火药扫描2"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换火药扫描2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换火药界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找火药3"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换火药.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "火药"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找火药3": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换火药扫描3"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换火药扫描3": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换火药界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找火药4"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换火药.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "火药"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找火药4": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换火药扫描4"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换火药扫描4": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换火药界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找火药5"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换火药.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "火药"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找火药5": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换火药扫描5"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换火药扫描5": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换火药界面"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换火药.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "火药"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交换铁砂": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换铁砂界面"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换铁砂.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "铁砂"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "等待交换铁砂界面": {
+        "action": {
+            "type": "DoNothing"
+        },
+        "next": [
+            "滑动交换铁砂"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换铁砂界面.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "铁砂"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "滑动交换铁砂": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并滑动交易滑条",
+            "custom_action_param": {
+                "window_template": "交换铁砂界面.png",
+                "window_threshold": 0.7,
+                "dark_threshold": 175,
+                "duration": 400,
+                "next_node": "购买交换铁砂",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "购买交换铁砂"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+},
+    "购买交换铁砂": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并识别购买按钮",
+            "custom_action_param": {
+                "window_template": "交换铁砂界面.png",
+                "window_threshold": 0.7,
+                "button_template": "购买按钮.png",
+                "button_threshold": 0.7,
+                "next_node": "扫描交易所商品",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "扫描交易所商品"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ]
+},
+    "交易所small滑动寻找铁砂1": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换铁砂扫描1"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换铁砂扫描1": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换铁砂界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找铁砂2"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换铁砂.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "铁砂"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找铁砂2": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换铁砂扫描2"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换铁砂扫描2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换铁砂界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找铁砂3"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换铁砂.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "铁砂"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找铁砂3": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换铁砂扫描3"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换铁砂扫描3": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换铁砂界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找铁砂4"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换铁砂.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "铁砂"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找铁砂4": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换铁砂扫描4"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换铁砂扫描4": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换铁砂界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找铁砂5"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换铁砂.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "铁砂"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找铁砂5": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换铁砂扫描5"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换铁砂扫描5": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换铁砂界面"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换铁砂.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "铁砂"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交换化学品": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换化学品界面"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换化学品.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "化学品"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "等待交换化学品界面": {
+        "action": {
+            "type": "DoNothing"
+        },
+        "next": [
+            "滑动交换化学品"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换化学品界面.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "化学品"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "滑动交换化学品": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并滑动交易滑条",
+            "custom_action_param": {
+                "window_template": "交换化学品界面.png",
+                "window_threshold": 0.7,
+                "dark_threshold": 175,
+                "duration": 400,
+                "next_node": "购买交换化学品",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "购买交换化学品"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+},
+    "购买交换化学品": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并识别购买按钮",
+            "custom_action_param": {
+                "window_template": "交换化学品界面.png",
+                "window_threshold": 0.7,
+                "button_template": "购买按钮.png",
+                "button_threshold": 0.7,
+                "next_node": "扫描交易所商品",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "扫描交易所商品"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ]
+},
+    "交易所large滑动寻找化学品1": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换化学品扫描1"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换化学品扫描1": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换化学品界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找化学品2"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换化学品.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "化学品"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找化学品2": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换化学品扫描2"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换化学品扫描2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换化学品界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找化学品3"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换化学品.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "化学品"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找化学品3": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换化学品扫描3"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换化学品扫描3": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换化学品界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找化学品4"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换化学品.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "化学品"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找化学品4": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换化学品扫描4"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换化学品扫描4": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换化学品界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找化学品5"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换化学品.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "化学品"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找化学品5": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换化学品扫描5"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换化学品扫描5": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换化学品界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找化学品6"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换化学品.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "化学品"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找化学品6": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换化学品扫描6"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换化学品扫描6": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换化学品界面"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换化学品.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "化学品"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交换海枣": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换海枣界面"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换海枣.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "海枣"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "等待交换海枣界面": {
+        "action": {
+            "type": "DoNothing"
+        },
+        "next": [
+            "滑动交换海枣"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换海枣界面.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "海枣"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "滑动交换海枣": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并滑动交易滑条",
+            "custom_action_param": {
+                "window_template": "交换海枣界面.png",
+                "window_threshold": 0.7,
+                "dark_threshold": 175,
+                "duration": 400,
+                "next_node": "购买交换海枣",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "购买交换海枣"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+},
+    "购买交换海枣": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并识别购买按钮",
+            "custom_action_param": {
+                "window_template": "交换海枣界面.png",
+                "window_threshold": 0.7,
+                "button_template": "购买按钮.png",
+                "button_threshold": 0.7,
+                "next_node": "扫描交易所商品",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "扫描交易所商品"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ]
+},
+    "交易所large滑动寻找海枣1": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换海枣扫描1"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换海枣扫描1": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换海枣界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找海枣2"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换海枣.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "海枣"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找海枣2": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换海枣扫描2"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换海枣扫描2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换海枣界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找海枣3"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换海枣.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "海枣"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找海枣3": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换海枣扫描3"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换海枣扫描3": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换海枣界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找海枣4"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换海枣.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "海枣"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找海枣4": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换海枣扫描4"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换海枣扫描4": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换海枣界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找海枣5"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换海枣.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "海枣"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找海枣5": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换海枣扫描5"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换海枣扫描5": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换海枣界面"
+        ],
+        "on_error": [
+            "交易所large滑动寻找海枣6"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换海枣.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "海枣"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所large滑动寻找海枣6": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    650,
+                    40,
+                    40
+                ],
+                "end": [
+                    [
+                        640,
+                        90,
+                        40,
+                        40
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换海枣扫描6"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换海枣扫描6": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换海枣界面"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "交换海枣.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "海枣"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交换木材": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木材界面"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换木材.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木材"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "等待交换木材界面": {
+        "action": {
+            "type": "DoNothing"
+        },
+        "next": [
+            "滑动交换木材"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换木材界面.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木材"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "滑动交换木材": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并滑动交易滑条",
+            "custom_action_param": {
+                "window_template": "加密币交换木材界面.png",
+                "window_threshold": 0.7,
+                "dark_threshold": 175,
+                "duration": 400,
+                "next_node": "购买交换木材",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "购买交换木材"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+},
+    "购买交换木材": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并识别购买按钮",
+            "custom_action_param": {
+                "window_template": "加密币交换木材界面.png",
+                "window_threshold": 0.7,
+                "button_template": "购买按钮.png",
+                "button_threshold": 0.7,
+                "next_node": "扫描交易所商品",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "扫描交易所商品"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ]
+},
+    "交易所small滑动寻找木材1": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木材扫描1"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木材扫描1": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木材界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找木材2"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换木材.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木材"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找木材2": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木材扫描2"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木材扫描2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木材界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找木材3"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换木材.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木材"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找木材3": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木材扫描3"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木材扫描3": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木材界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找木材4"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换木材.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木材"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找木材4": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木材扫描4"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木材扫描4": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木材界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找木材5"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换木材.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木材"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找木材5": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换木材扫描5"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换木材扫描5": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换木材界面"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换木材.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "木材"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交换石头": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换石头界面"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换石头.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "石头"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "等待交换石头界面": {
+        "action": {
+            "type": "DoNothing"
+        },
+        "next": [
+            "滑动交换石头"
+        ],
+        "on_error": [
+            "扫描交易所商品"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换石头界面.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "石头"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "滑动交换石头": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并滑动交易滑条",
+            "custom_action_param": {
+                "window_template": "加密币交换石头界面.png",
+                "window_threshold": 0.7,
+                "dark_threshold": 175,
+                "duration": 400,
+                "next_node": "购买交换石头",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "购买交换石头"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ],
+    "pre_wait_freezes": 400,
+    "rate_limit": 500
+},
+    "购买交换石头": {
+    "action": {
+        "type": "Custom",
+        "param": {
+            "custom_action": "动态定位并识别购买按钮",
+            "custom_action_param": {
+                "window_template": "加密币交换石头界面.png",
+                "window_threshold": 0.7,
+                "button_template": "购买按钮.png",
+                "button_threshold": 0.7,
+                "next_node": "交易所交换完成",
+                "failure_node": "扫描交易所商品"
+            }
+        }
+    },
+    "next": [
+        "交易所交换完成"
+    ],
+    "on_error": [
+        "扫描交易所商品"
+    ]
+},
+    "交易所small滑动寻找石头1": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换石头扫描1"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换石头扫描1": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换石头界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找石头2"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换石头.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "石头"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找石头2": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换石头扫描2"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换石头扫描2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换石头界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找石头3"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换石头.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "石头"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找石头3": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换石头扫描3"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换石头扫描3": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换石头界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找石头4"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换石头.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "石头"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找石头4": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换石头扫描4"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换石头扫描4": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换石头界面"
+        ],
+        "on_error": [
+            "交易所small滑动寻找石头5"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换石头.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "石头"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所small滑动寻找石头5": {
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "begin": [
+                    640,
+                    450,
+                    20,
+                    20
+                ],
+                "end": [
+                    [
+                        640,
+                        350,
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        "next": [
+            "交换石头扫描5"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "pre_wait_freezes": 400,
+        "rate_limit": 500
+    },
+    "交换石头扫描5": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "点击识别框中心"
+            }
+        },
+        "next": [
+            "等待交换石头界面"
+        ],
+        "on_error": [
+            "交易所交换失败"
+        ],
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    {
+                        "recognition": {
+                            "type": "TemplateMatch",
+                            "param": {
+                                "template": [
+                                    "加密币交换石头.png"
+                                ],
+                                "threshold": 0.7
+                            }
+                        }
+                    },
+                    {
+                        "recognition": {
+                            "type": "OCR",
+                            "param": {
+                                "expected": [
+                                    "石头"
+                                ],
+                                "order_by": "Expected"
+                            }
+                        }
+                    }
+                ],
+                "box_index": 1
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所交换完成": {
+        "action": {
+            "type": "DoNothing"
+        },
+        "next": [
+            "返回公会"
+    ],
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "template": [
+                    "交易所.png"
+                ],
+                "threshold": 0.7
+            }
+        },
+        "timeout": 30000
+    },
+    "交易所交换失败": {
+        "action": {
+            "type": "DoNothing"
+        }
+    }
+
 }

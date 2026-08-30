@@ -1,0 +1,142 @@
+[
+  {
+    "label": 1,
+    "path": "resource/image/color_digit_templates/1a.png",
+    "source": "彩色拼图解题1.png sample 1"
+  },
+  {
+    "label": 1,
+    "path": "resource/image/color_digit_templates/1b.png",
+    "source": "彩色拼图解题1.png sample 2"
+  },
+  {
+    "label": 2,
+    "path": "resource/image/color_digit_templates/2a.png",
+    "source": "彩色拼图解题1.png sample 17"
+  },
+  {
+    "label": 2,
+    "path": "resource/image/color_digit_templates/2b.png",
+    "source": "彩色拼图解题1.png sample 0"
+  },
+  {
+    "label": 3,
+    "path": "resource/image/color_digit_templates/3a.png",
+    "source": "彩色拼图解题1.png sample 21"
+  },
+  {
+    "label": 3,
+    "path": "resource/image/color_digit_templates/3b.png",
+    "source": "彩色拼图解题1.png sample 76"
+  },
+  {
+    "label": 4,
+    "path": "resource/image/color_digit_templates/4a.png",
+    "source": "彩色拼图解题1.png sample 27"
+  },
+  {
+    "label": 4,
+    "path": "resource/image/color_digit_templates/4b.png",
+    "source": "彩色拼图解题1.png sample 118"
+  },
+  {
+    "label": 5,
+    "path": "resource/image/color_digit_templates/5a.png",
+    "source": "彩色拼图解题1.png sample 54"
+  },
+  {
+    "label": 5,
+    "path": "resource/image/color_digit_templates/5b.png",
+    "source": "彩色拼图解题1.png sample 105"
+  },
+  {
+    "label": 6,
+    "path": "resource/image/color_digit_templates/6a.png",
+    "source": "彩色拼图解题1.png sample 32"
+  },
+  {
+    "label": 6,
+    "path": "resource/image/color_digit_templates/6b.png",
+    "source": "彩色拼图解题5.png sample 670"
+  },
+  {
+    "label": 7,
+    "path": "resource/image/color_digit_templates/7a.png",
+    "source": "彩色拼图解题3.png sample 451"
+  },
+  {
+    "label": 8,
+    "path": "resource/image/color_digit_templates/8a.png",
+    "source": "彩色拼图解题3.png sample 336"
+  },
+  {
+    "label": 9,
+    "path": "resource/image/color_digit_templates/9a.png",
+    "source": "彩色拼图解题8.png sample 1211"
+  },
+  {
+    "label": 10,
+    "path": "resource/image/color_digit_templates/10a.png",
+    "source": "彩色拼图解题2.png sample 230"
+  },
+  {
+    "label": 10,
+    "path": "resource/image/color_digit_templates/10b.png",
+    "source": "彩色拼图解题8.png sample 1175"
+  },
+  {
+    "label": 11,
+    "path": "resource/image/color_digit_templates/11a.png",
+    "source": "彩色拼图解题12.png column 11 slot 1"
+  },
+  {
+    "label": 11,
+    "path": "resource/image/color_digit_templates/11b.png",
+    "source": "彩色拼图解题14.png column 2 slot 0"
+  },
+  {
+    "label": 11,
+    "path": "resource/image/color_digit_templates/11c.png",
+    "source": "彩色拼图解题15.png column 12 slot 0"
+  },
+  {
+    "label": 12,
+    "path": "resource/image/color_digit_templates/12a.png",
+    "source": "彩色拼图解题13.png row 13 slot 1"
+  },
+  {
+    "label": 12,
+    "path": "resource/image/color_digit_templates/12b.png",
+    "source": "彩色拼图解题14.png row 6 slot 1"
+  },
+  {
+    "label": 13,
+    "path": "resource/image/color_digit_templates/13a.png",
+    "source": "彩色拼图解题3.png sample 245"
+  },
+  {
+    "label": 13,
+    "path": "resource/image/color_digit_templates/13b.png",
+    "source": "彩色拼图解题14.png row 8 slot 1"
+  },
+  {
+    "label": 13,
+    "path": "resource/image/color_digit_templates/13c.png",
+    "source": "彩色拼图解题15.png column 3 slot 0"
+  },
+  {
+    "label": 14,
+    "path": "resource/image/color_digit_templates/14a.png",
+    "source": "彩色拼图解题13.png row 1 slot 0"
+  },
+  {
+    "label": 14,
+    "path": "resource/image/color_digit_templates/14b.png",
+    "source": "彩色拼图解题15.png column 8 slot 0"
+  },
+  {
+    "label": 15,
+    "path": "resource/image/color_digit_templates/15a.png",
+    "source": "彩色拼图解题2.png sample 211"
+  }
+]

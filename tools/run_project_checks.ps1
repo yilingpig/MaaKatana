@@ -23,8 +23,8 @@ function Invoke-Checked {
     }
 }
 
-Get-Content -Raw -LiteralPath '.\assets\interface.json' | ConvertFrom-Json | Out-Null
-Get-Content -Raw -LiteralPath '.\assets\resource\pipeline\Pipeline7.json' | ConvertFrom-Json | Out-Null
+Get-Content -Raw -Encoding UTF8 -LiteralPath '.\assets\interface.json' | ConvertFrom-Json | Out-Null
+Get-Content -Raw -Encoding UTF8 -LiteralPath '.\assets\resource\pipeline\Pipeline7.json' | ConvertFrom-Json | Out-Null
 
 $pythonFiles = @(Get-ChildItem -LiteralPath '.\agent' -Filter '*.py' -File | ForEach-Object FullName)
 if ($pythonFiles.Count -eq 0) {
@@ -32,6 +32,16 @@ if ($pythonFiles.Count -eq 0) {
 }
 Invoke-Checked -Command 'python' -Arguments (@('-m', 'py_compile') + $pythonFiles)
 Write-Output 'Python compile: PASS'
+
+$previousPythonPath = $env:PYTHONPATH
+$env:PYTHONPATH = Join-Path $projectRoot 'agent'
+try {
+    Invoke-Checked -Command 'python' -Arguments @('-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_*.py', '-v')
+}
+finally {
+    $env:PYTHONPATH = $previousPythonPath
+}
+Write-Output 'Python tests: PASS'
 
 if (-not $SkipSchema) {
     Invoke-Checked -Command 'python' -Arguments @('.\tools\validate_schema.py', '--schema-dir', '.\deps\tools', '--resource-dirs', '.\assets\resource')
@@ -49,7 +59,7 @@ if (($pipelineHashes.Hash | Select-Object -Unique).Count -ne 1) {
 }
 Write-Output 'Pipeline synchronization: PASS'
 
-$agentCopyNames = @('main.py', 'building_router.py', 'dynamic_swipe.py', 'dynamic_bidirectional_swipe.py')
+$agentCopyNames = @('main.py', 'building_router.py', 'condition_router.py', 'dynamic_swipe.py', 'dynamic_bidirectional_swipe.py', 'nonogram_solver.py', 'color_nonogram_solver.py', 'color_nonogram_core.py', 'color_nonogram_model.py', 'color_nonogram_vision.py', 'color_nonogram_digits.py', 'color_nonogram_truth.py', 'color_nonogram_disambiguation.py', 'color_nonogram_test.py', 'color_nonogram_paint_test.py')
 foreach ($agentName in $agentCopyNames) {
     $source = Join-Path $projectRoot "agent\$agentName"
     $copy = Join-Path $projectRoot "install\agent\$agentName"

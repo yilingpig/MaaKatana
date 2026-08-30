@@ -12,6 +12,12 @@ import dynamic_swipe
 import dynamic_bidirectional_swipe
 import reward_reco
 import condition_router
+import exchange_router
+import exchange_slider
+import nonogram_solver
+import color_nonogram_solver
+import color_nonogram_test
+import color_nonogram_paint_test
 
 
 def main():

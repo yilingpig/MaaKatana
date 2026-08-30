@@ -2,6 +2,46 @@
   "interface_version": 2,
   "name": "MaaKatana",
   "description": "这是一个使用 MaaFramework 创建的个人用自动化工具，用于日本拼图nonogram katana的自动化。",
+  "option": {
+    "AllowColorNonogramPaintTest": {
+      "type": "switch",
+      "label": "允许彩色数织安全绘制",
+      "description": "仅用于独立的彩色数织绘制测试，默认关闭。开启后会实际点击模拟器棋盘。",
+      "default_case": "No",
+      "cases": [
+        {
+          "name": "Yes",
+          "label": "允许",
+          "pipeline_override": {
+            "ColorNonogram1080pPaintTest": {
+              "action": {
+                "param": {
+                  "custom_action_param": {
+                    "allow_paint": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "No",
+          "label": "禁止",
+          "pipeline_override": {
+            "ColorNonogram1080pPaintTest": {
+              "action": {
+                "param": {
+                  "custom_action_param": {
+                    "allow_paint": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
   "contact": "请输入文本",
   "license": "MIT",
   "welcome": "首次使用！欢迎使用 MaaKatana!",
@@ -54,6 +94,26 @@
     {
       "name": "汽船-墨尔本",
       "entry": "检查汽船_墨尔本"
+    },
+
+    {
+      "name": "彩色数织1080p安全绘制测试",
+      "entry": "ColorNonogram1080pPaintTest",
+      "option": [
+        "AllowColorNonogramPaintTest"
+      ]
+    },
+    {
+      "name": "黑白数织测试",
+      "entry": "黑白数织测试"
+    },
+    {
+      "name": "商店购买",
+      "entry": "商店购买"
+    },
+    {
+      "name": "交易所交换",
+      "entry": "进入交易所交换"
     }
   ],
   "agent": {

@@ -48,7 +48,8 @@ def _collect_texts(detail) -> list[str]:
 
 
 def _normalize(text: str) -> str:
-    return re.sub(r"[\s\W_]", "", str(text))
+    normalized = str(text).replace("×", "x").replace("X", "x")
+    return re.sub(r"[\s\W_]", "", normalized)
 
 
 @AgentServer.custom_action("图文条件并跳转")
